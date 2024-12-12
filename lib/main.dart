@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_hub_user/View/Login_Screen.dart';
+import 'package:food_hub_user/View/ResetPassword_Screen.dart';
 import 'package:food_hub_user/View/SignUp_Screen.dart';
-import 'package:food_hub_user/View/Splash_Screen.dart';
 
 void main() {
   runApp(const MyApp());
