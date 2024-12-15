@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/View/login_screen.dart';
-import 'package:food_hub_user/View/SignUp_Screen.dart';
+import 'package:food_hub_user/View/signup_screen.dart';
+import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -37,66 +39,65 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
           ),
-          SafeArea(
-              child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 130,
-                  left: 28,
-                ),
-                child: RichText(
+          Padding(
+            padding: const EdgeInsets.only(left: 26),
+            child: Column(
+              children: [
+                160.sizeHeight,
+                RichText(
                   text: TextSpan(children: [
                     TextSpan(
-                      text: "Welcome To \n",
+                      text: "Welcome to \n",
                       style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 47,
                           fontFamily: 'sp',
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
-                      text: "Foodhub",
+                      text: "FoodHub",
                       style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 47,
                           fontFamily: 'sp',
                           color: Color(0xffFE724C),
                           fontWeight: FontWeight.bold),
                     ),
                   ]),
                 ),
-              ),
-              Text(
-                "Your favourite foods delivered\nfast at your door.",
-              ),
-            ],
-          )),
+                20.sizeHeight,
+                Text(
+                  "Your favourite foods delivered\nfast at your door.",
+                  style: TextStyle(
+                      color: AppColors.welcomeTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
+          ),
+          30.sizeHeight,
           Column(
             children: [
-              SizedBox(
-                height: 650,
-              ),
+              650.sizeHeight,
               Center(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       side: BorderSide(color: Colors.white, strokeAlign: 2),
-                      fixedSize: Size(300, 50),
+                      fixedSize: Size(315, 54),
                       backgroundColor: Colors.white30,
                     ),
                     onPressed: () {
                       Get.to(SignupScreen());
                     },
                     child: Text(
-                      "Start With Email",
+                      "Start with email",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 15,
+                          fontSize: 17,
                           fontWeight: FontWeight.bold),
                     )),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              20.sizeHeight,
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +107,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   Text(
                     "Already have an account?",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
                   TextButton(
                       onPressed: () {
@@ -115,7 +116,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       child: Text(
                         "Sign In",
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.white,
+                        ),
                       ))
                 ],
               )

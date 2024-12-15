@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/View/Welcome_Screen.dart';
+import 'package:food_hub_user/View/welcome_screen.dart';
 import 'package:food_hub_user/const/colors.dart';
 
 class SplashScreen extends StatefulWidget {
