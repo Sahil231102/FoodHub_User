@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/View/login_screen.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/send_reset_password_email.dart';
 import 'package:food_hub_user/view/widget/auth_comman_button.dart';
 import 'package:food_hub_user/view/widget/common_text_field.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 class ResetpasswordScreen extends StatefulWidget {
   const ResetpasswordScreen({super.key});

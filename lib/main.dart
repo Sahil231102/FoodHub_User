@@ -4,6 +4,8 @@ import 'package:food_hub_user/View/reset_password_screen.dart';
 import 'package:food_hub_user/View/signup_screen.dart';
 import 'package:food_hub_user/View/welcome_screen.dart';
 import 'package:food_hub_user/firebase_options.dart';
+import 'package:food_hub_user/view/auth/splash_screen.dart';
+import 'package:food_hub_user/view/home/side_menu.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'View/home_screen.dart';
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SignupScreen(),
+      home: SplashScreen(),
     );
   }
 }

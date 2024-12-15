@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/View/welcome_screen.dart';
 import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/view/auth/welcome_screen.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,11 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(
       Duration(seconds: 5),
-      () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WelcomeScreen(),
-          )),
+      () => Get.to(() => WelcomeScreen()),
     );
     super.initState();
   }

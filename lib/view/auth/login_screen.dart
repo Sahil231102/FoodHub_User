@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/View/reset_password_screen.dart';
-import 'package:food_hub_user/View/signup_screen.dart';
+import 'package:food_hub_user/view/auth/signup_screen.dart';
 import 'package:food_hub_user/const/Icons.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/login_controller.dart';
+import 'package:food_hub_user/view/auth/reset_password_screen.dart';
 import 'package:food_hub_user/view/widget/auth_comman_button.dart';
 import 'package:food_hub_user/view/widget/auth_comman_title_text.dart';
 import 'package:food_hub_user/view/widget/common_text_field.dart';
