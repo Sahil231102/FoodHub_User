@@ -5,7 +5,8 @@ import 'package:food_hub_user/const/text_style.dart';
 class AuthCommanButton extends StatelessWidget {
   final void Function()? onTap;
   final String text;
-  const AuthCommanButton({super.key, required this.text, this.onTap});
+  final bool isLoading;
+  const AuthCommanButton({super.key, required this.text, this.onTap, this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +27,17 @@ class AuthCommanButton extends StatelessWidget {
                     offset: Offset(0, 2))
               ]),
           child: Center(
-            child: Text(
-              text ?? "",
-              style: AppTextStyle.w700(
-                color: AppColors.buttonTextColor,
-                fontSize: 15,
-              ),
-            ),
+            child: isLoading
+                ? CircularProgressIndicator(
+                    backgroundColor: AppColors.white,
+                  )
+                : Text(
+                    text ?? "",
+                    style: AppTextStyle.w700(
+                      color: AppColors.buttonTextColor,
+                      fontSize: 15,
+                    ),
+                  ),
           ),
         ),
       ),

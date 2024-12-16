@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/view/auth/welcome_screen.dart';
 import 'package:get/get.dart';
 
@@ -24,17 +25,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.primary,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
-            child: Image(
-                image: AssetImage(
-              "assets/images/logo.png",
-            )),
+            child: Image(image: AssetImage(AppImages.appLogo)),
           )
         ],
       ),

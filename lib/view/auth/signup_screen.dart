@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/View/login_screen.dart';
 import 'package:food_hub_user/const/Icons.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/signup_controller.dart';
+import 'package:food_hub_user/services/validator.dart';
+import 'package:food_hub_user/view/auth/login_screen.dart';
 import 'package:food_hub_user/view/widget/auth_comman_button.dart';
 import 'package:food_hub_user/view/widget/common_text_field.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
@@ -63,9 +64,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             const Text(
                               "Sign Up",
                               style: TextStyle(
-                                  fontSize: 42,
-                                  fontFamily: "sp",
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 42, fontFamily: "sp", fontWeight: FontWeight.bold),
                             ),
                             31.sizeHeight,
                             CommonTextField(
@@ -83,12 +82,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             CommonTextField(
                               labelText: "E-mail",
                               hintText: "Enter E-mail",
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your email";
-                                }
-                                return null;
-                              },
+                              validator: (p0) => AppValidator.validateEmail(p0),
                               controller: emailController,
                             ),
                             29.sizeHeight,
@@ -96,14 +90,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               return CommonTextField(
                                 labelText: "Password",
                                 hintText: "Enter Password",
-                                obscureText:
-                                    !_signupController.isPasswordVisible.value,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please enter your password";
-                                  }
-                                  return null;
-                                },
+                                obscureText: !_signupController.isPasswordVisible.value,
+                                validator: (p0) => AppValidator.validatePassword(p0),
                                 controller: passwordController,
                                 suffixIcon: IconButton(
                                     icon: Icon(
@@ -112,8 +100,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           : AppIcons.visibility_off,
                                     ),
                                     color: AppColors.iconColor,
-                                    onPressed: _signupController
-                                        .togglePasswordVisibility),
+                                    onPressed: _signupController.togglePasswordVisibility),
                               );
                             }),
                             33.sizeHeight,

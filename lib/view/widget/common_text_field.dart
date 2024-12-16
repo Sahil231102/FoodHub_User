@@ -29,8 +29,7 @@ class CommonTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(labelText ?? "",
-            style: AppTextStyle.w300(
-                fontSize: 16, color: AppColors.labelTextColor)),
+            style: AppTextStyle.w300(fontSize: 16, color: AppColors.labelTextColor)),
         12.sizeHeight,
         TextFormField(
           onTap: onTap,
@@ -46,8 +45,7 @@ class CommonTextField extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(20),
             hintText: hintText,
-            hintStyle:
-                AppTextStyle.w400(color: AppColors.hintTextColor, fontSize: 17),
+            hintStyle: AppTextStyle.w400(color: AppColors.hintTextColor, fontSize: 17),
             suffixIcon: suffixIcon,
             filled: true,
             fillColor: AppColors.textFormFieldFillColor,
@@ -65,7 +63,6 @@ class CommonTextField extends StatelessWidget {
 
   OutlineInputBorder _border({Color color = AppColors.primary}) {
     return OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: color));
+        borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: color));
   }
 }

@@ -7,8 +7,7 @@ class AnimatedSideMenu extends StatefulWidget {
   _AnimatedSideMenuState createState() => _AnimatedSideMenuState();
 }
 
-class _AnimatedSideMenuState extends State<AnimatedSideMenu>
-    with SingleTickerProviderStateMixin {
+class _AnimatedSideMenuState extends State<AnimatedSideMenu> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool isMenuOpen = false;
 
@@ -46,8 +45,7 @@ class _AnimatedSideMenuState extends State<AnimatedSideMenu>
             height: menuHeight,
             color: Colors.white,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -115,9 +113,8 @@ class _AnimatedSideMenuState extends State<AnimatedSideMenu>
                                 child: Container(
                                   height: 26,
                                   width: 26,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.white),
+                                  decoration:
+                                      BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
                                   child: Icon(
                                     Icons.power_settings_new_sharp,
                                     color: AppColors.primary,
@@ -128,8 +125,7 @@ class _AnimatedSideMenuState extends State<AnimatedSideMenu>
                               Center(
                                 child: Text(
                                   "Log Out",
-                                  style: AppTextStyle.w600(
-                                      color: AppColors.white, fontSize: 14),
+                                  style: AppTextStyle.w600(color: AppColors.white, fontSize: 14),
                                 ),
                               )
                             ],

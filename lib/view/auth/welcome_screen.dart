@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/View/login_screen.dart';
-import 'package:food_hub_user/View/signup_screen.dart';
 import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/view/auth/login_screen.dart';
+import 'package:food_hub_user/view/auth/signup_screen.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
 
@@ -68,9 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Text(
                   "Your favourite foods delivered\nfast at your door.",
                   style: TextStyle(
-                      color: AppColors.welcomeTextColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
+                      color: AppColors.welcomeTextColor, fontSize: 18, fontWeight: FontWeight.w500),
                 )
               ],
             ),
@@ -91,10 +89,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     },
                     child: Text(
                       "Start with email",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
                     )),
               ),
               20.sizeHeight,

@@ -8,6 +8,6 @@ class FirebaseCollectionNAmes {
 class FirebaseServices {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  static CollectionReference<Map<String, dynamic>> firebaseFirestore =
+  static CollectionReference<Map<String, dynamic>> useFirestore =
       FirebaseFirestore.instance.collection(FirebaseCollectionNAmes.user);
 }

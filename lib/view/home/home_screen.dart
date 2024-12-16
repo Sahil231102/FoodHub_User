@@ -17,8 +17,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   "4102 Pts",
-                  style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -117,8 +116,7 @@ class CategoryCard extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const CategoryCard({Key? key, required this.icon, required this.label})
-      : super(key: key);
+  const CategoryCard({Key? key, required this.icon, required this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,18 +192,15 @@ class RestaurantCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   SizedBox(height: 4),
                   Row(
                     children: [
                       Icon(Icons.star, color: Colors.yellow, size: 16),
                       SizedBox(width: 4),
                       Text(rating,
-                          style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontWeight: FontWeight.bold)),
+                          style:
+                              TextStyle(color: Colors.grey.shade600, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   SizedBox(height: 4),
@@ -215,9 +210,7 @@ class RestaurantCard extends StatelessWidget {
                     spacing: 6,
                     children: tags
                         .map((tag) => Chip(
-                              label: Text(tag,
-                                  style: TextStyle(
-                                      fontSize: 10, color: Colors.white)),
+                              label: Text(tag, style: TextStyle(fontSize: 10, color: Colors.white)),
                               backgroundColor: Colors.orangeAccent,
                               padding: EdgeInsets.symmetric(horizontal: 8),
                             ))

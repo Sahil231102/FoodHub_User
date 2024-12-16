@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/view/auth/signup_screen.dart';
 import 'package:food_hub_user/const/Icons.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/login_controller.dart';
+import 'package:food_hub_user/services/validator.dart';
 import 'package:food_hub_user/view/auth/reset_password_screen.dart';
+import 'package:food_hub_user/view/auth/signup_screen.dart';
 import 'package:food_hub_user/view/widget/auth_comman_button.dart';
 import 'package:food_hub_user/view/widget/auth_comman_title_text.dart';
 import 'package:food_hub_user/view/widget/common_text_field.dart';
@@ -31,7 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  final _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,19 +43,15 @@ class _LoginScreenState extends State<LoginScreen> {
           return SafeArea(
             child: Stack(
               children: [
-                const Positioned(
-                    child: Image(image: AssetImage(AppImages.Circle1))),
-                const Positioned(
-                    child: Image(image: AssetImage(AppImages.Circle2))),
-                const Positioned(
-                    right: 0,
-                    child: Image(image: AssetImage(AppImages.Circle3))),
+                const Positioned(child: Image(image: AssetImage(AppImages.Circle1))),
+                const Positioned(child: Image(image: AssetImage(AppImages.Circle2))),
+                const Positioned(right: 0, child: Image(image: AssetImage(AppImages.Circle3))),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: SingleChildScrollView(
                       child: Form(
-                        key: _formkey,
+                        key: _formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,15 +62,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             31.sizeHeight,
                             CommonTextField(
-                                labelText: "E-mail",
-                                hintText: "Your email",
-                                controller: emailController),
+                              labelText: "E-mail",
+                              hintText: "Your email",
+                              controller: emailController,
+                              validator: (value) => AppValidator.validateEmail(value),
+                            ),
                             31.sizeHeight,
                             Obx(
                               () {
                                 return CommonTextField(
-                                  obscureText:
-                                      _loginController.isPasswordVisible.value,
+                                  obscureText: _loginController.isPasswordVisible.value,
                                   hintText: "Password",
                                   controller: passwordController,
                                   labelText: "Password",
@@ -82,8 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         : AppIcons.visibility_off,
                                     color: AppColors.iconColor,
                                   ),
-                                  onTap:
-                                      _loginController.togglePasswordVisibility,
+                                  onTap: _loginController.togglePasswordVisibility,
+                                  validator: (value) => AppValidator.validatePassword(value),
                                 );
                               },
                             ),
@@ -93,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Get.to(const ResetpasswordScreen());
+                                    Get.to(() => const ResetPasswordScreen());
                                   },
                                   child: const Text(
                                     "Forgot Password?",
@@ -107,16 +106,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             32.sizeHeight,
                             AuthCommanButton(
-                                onTap: () async {
-                                  if (_formkey.currentState?.validate() ??
-                                      false) {
-                                    await controller.emailLogin(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                    );
-                                  }
-                                },
-                                text: "LOGIN"),
+                              onTap: () async {
+                                if (_formKey.currentState?.validate() ?? false) {
+                                  await controller.emailLogin(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                }
+                              },
+                              text: "LOGIN",
+                              isLoading: controller.isLoginCircular,
+                            ),
                             const SizedBox(height: 16),
                             32.sizeHeight,
                             Row(
@@ -128,8 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Get.to(const SignupScreen());
                                   },
                                   child: Container(
-                                    margin: const EdgeInsets.all(
-                                        0), // Sets margin to 0
+                                    margin: const EdgeInsets.all(0), // Sets margin to 0
                                     child: const Text(
                                       "Sign Up",
                                       style: TextStyle(
