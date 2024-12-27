@@ -128,7 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Get.to(const SignupScreen());
                                   },
                                   child: Container(
-                                    margin: const EdgeInsets.all(0), // Sets margin to 0
+                                    margin: const EdgeInsets.all(0),
+                                    // Sets margin to 0
                                     child: const Text(
                                       "Sign Up",
                                       style: TextStyle(

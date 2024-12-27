@@ -6,8 +6,14 @@ import 'package:food_hub_user/services/firebase_services.dart';
 import 'package:food_hub_user/view/home/home_screen.dart';
 import 'package:food_hub_user/view/widget/app_snackbar.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+
+import '../services/get_storage_services.dart';
 
 class LoginController extends GetxController {
+  final GetStorageServices _getStorageServices = Get.put(GetStorageServices());
+
+  final box = GetStorage();
   var isPasswordVisible = false.obs;
 
   void togglePasswordVisibility() {
@@ -19,17 +25,22 @@ class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  Future<void> emailLogin({required String email, required String password}) async {
+  Future<void> emailLogin(
+      {required String email, required String password}) async {
     try {
       isLoginCircular = true;
       update();
 
-      final userData = await FirebaseServices.firebaseAuth.signInWithEmailAndPassword(
+      final userData =
+          await FirebaseServices.firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (userData.user?.uid != null) {
+        await _getStorageServices.write("email", emailController);
+        await _getStorageServices.write("password", passwordController.text);
+
         await FirebaseServices.useFirestore.doc(userData.user?.uid).update({
           "last_login_time": DateTime.now().toIso8601String(),
         });

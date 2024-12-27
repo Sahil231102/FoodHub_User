@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
-import 'package:food_hub_user/view/auth/welcome_screen.dart';
+import 'package:food_hub_user/controller/get_storege_controller.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,13 +12,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final GetStorageController _getStorageController =
+      Get.put(GetStorageController());
+
   @override
   void initState() {
-    Timer(
-      Duration(seconds: 5),
-      () => Get.to(() => WelcomeScreen()),
-    );
     super.initState();
+
+    _getStorageController.checkUserData();
   }
 
   @override
@@ -33,6 +32,10 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Center(
             child: Image(image: AssetImage(AppImages.appLogo)),
+          ),
+          SizedBox(height: 20),
+          CircularProgressIndicator(
+            color: AppColors.white,
           )
         ],
       ),
