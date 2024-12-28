@@ -24,13 +24,8 @@ class AppValidator {
   }
 
   static String? validatePhoneNumber(String? value) {
-    String pattern = r'^[6-9][0-9]{9}$';
-    RegExp regExp = RegExp(pattern);
-
-    if (value == null || value.isEmpty) {
+    if (value == null) {
       return 'Phone number is required';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Enter a valid Indian phone number (starting with 6,7,8,9)';
     }
     return null;
   }
@@ -43,6 +38,34 @@ class AppValidator {
       return 'Password is required';
     } else if (!regExp.hasMatch(value)) {
       return 'Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one digit, and one special character';
+    }
+    return null;
+  }
+
+  static String? validateCountry(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a country';
+    }
+    return null;
+  }
+
+  static String? validateState(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a state';
+    }
+    return null;
+  }
+
+  static String? validateCity(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a city';
+    }
+    return null;
+  }
+
+  static String? validateGender(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a gender';
     }
     return null;
   }

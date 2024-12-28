@@ -6,6 +6,7 @@ class AuthCommanButton extends StatelessWidget {
   final void Function()? onTap;
   final String text;
   final bool isLoading;
+
   const AuthCommanButton({super.key, required this.text, this.onTap, this.isLoading = false});
 
   @override
@@ -28,7 +29,7 @@ class AuthCommanButton extends StatelessWidget {
               ]),
           child: Center(
             child: isLoading
-                ? CircularProgressIndicator(
+                ? const CircularProgressIndicator(
                     backgroundColor: AppColors.white,
                   )
                 : Text(

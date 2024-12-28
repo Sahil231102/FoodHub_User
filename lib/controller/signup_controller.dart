@@ -1,9 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/Icons.dart';
-import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/services/firebase_services.dart';
-import 'package:food_hub_user/view/auth/login_screen.dart';
+import 'package:food_hub_user/view/auth/user_info_screen.dart';
 import 'package:food_hub_user/view/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 
@@ -14,23 +11,34 @@ class SignupController extends GetxController {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
+  bool ioLoading = false;
+
+  String userId = "";
+
   Future<void> signUpData(
       {required String email, required String password, required String name}) async {
     if (email.isNotEmpty && password.isNotEmpty) {
       try {
+        ioLoading = true;
+        update();
+
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
-        await FirebaseServices.useFirestore.doc(userCredential.user?.uid).set({
-          "uid": userCredential.user?.uid,
+        String userid = userCredential.user?.uid ?? '';
+
+        await FirebaseServices.useFirestore.doc(userid).set({
+          "uid": userid,
           "password": password,
           "email": email,
           "name": name,
-          "last_login_time": DateTime.now().toIso8601String(),
+          "last_login_time": DateTime.now(),
         });
 
-        if (userCredential.user?.uid != null) {
-          Get.to(() => const LoginScreen());
+        if (userid != null) {
+          Get.to(() => UserInfoScreen(
+                uid: userid,
+              ));
           AppSnackbar.showError(
               message: "Welcome! You have successfully signed up.", title: "Sign Up Successful");
         }

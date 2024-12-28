@@ -114,6 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   );
                                 }
                               },
+                              isLoading: controller.ioLoading,
                               text: "SIGN UP",
                             ),
                             20.sizeHeight,

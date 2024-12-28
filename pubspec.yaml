@@ -44,8 +44,12 @@ dependencies:
   firebase_database: ^11.2.0
   intl_phone_field: ^3.2.0
   csc_picker: ^0.2.7
+  dropdown_button2: ^2.3.9
+  flutter_csc_picker:
+  image_picker: ^1.1.2
+  intl_phone_number_input:
 
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
