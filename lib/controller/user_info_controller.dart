@@ -1,5 +1,6 @@
 import 'package:food_hub_user/services/firebase_services.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
+import 'package:food_hub_user/view/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,48 +9,76 @@ class UserInfoController extends GetxController {
   final ImagePicker picker = ImagePicker();
   final List<XFile> selectedImages = [];
 
-  Future<void> ImagePickerSelect() async {}
+  String countryName = '';
+  String countryCode = '';
+  String countryPhone = '';
 
-  var selectedGender = 'Male'.obs; // Observable variable
+  String state = '';
+  String city = '';
 
-  // Function to update the selected gender
+  var selectedGender = '';
+
+  //  selected gender
   void updateGender(String gender) {
-    selectedGender.value = gender;
+    selectedGender = gender;
     update(); // This manually triggers the update for the widget
   }
+
+  //City , country, state Picker
+
+  void updateCountry(String? value) {
+    countryName = value ?? '';
+
+    countryPhone = countryName.toString();
+    update(); // Notify listeners
+  }
+
+  void updateState(String? value) {
+    state = value ?? '';
+    update(); // Notify listeners
+  }
+
+  void updateCity(String? value) {
+    city = value ?? '';
+    update(); // Notify listeners
+  }
+
+  //UserInformation
 
   Future<void> userInformationData({
     String? uid,
     String? city,
-    String? country,
+    String? countryName,
+    String? countryCode,
     String? state,
     String? mobileNumber,
     String? gender,
   }) async {
     try {
-      if (city != null ||
-          country != null ||
+      if (uid!.isEmpty ||
+          city != null ||
+          countryName != null ||
           state != null ||
           mobileNumber != null ||
           gender != null) {
         await FirebaseServices.useFirestore.doc(uid).update(
           {
-            "city": city,
-            "country": country,
-            "state": state,
             "mobile_number": mobileNumber,
-            "gender": gender
+            "gender": gender,
+            "country_name": countryName,
+            "country_code": countryCode,
+            "state": state,
+            "city": city,
           },
         );
+        AppSnackbar.showSuccess(
+            message: "Your account has been created successfully.", title: "Signup Successfully");
         isUpdate = true;
         update();
         Get.to(() => LoginScreen());
       }
     } catch (e) {
       print("==========>$e");
-    } finally {
-      isUpdate = false;
-      update();
     }
   }
 }

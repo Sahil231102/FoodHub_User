@@ -1,104 +1,227 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/view/auth/login_screen.dart';
-import 'package:food_hub_user/view/widget/auth_comman_button.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/const/images.dart';
+import 'package:food_hub_user/const/text_style.dart';
+import 'package:food_hub_user/view/home/side_menu.dart';
+import 'package:icons_plus/icons_plus.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final box = GetStorage();
+    final PageController _pageController = PageController();
+
+    final List<String> foodImages = [
+      AppImages.page_1,
+      AppImages.page_2,
+      AppImages.page_3,
+      AppImages.page_4,
+    ];
+
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(items: items),
       backgroundColor: Colors.white,
+      drawer: const SideMenu(),
       appBar: AppBar(
-        elevation: 0,
         backgroundColor: Colors.white,
-        leading: Icon(Icons.menu, color: Colors.black), // Hamburger menu icon
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "4102 Pts",
-                  style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ],
+        title: Text(
+          "Welcome!",
+          style: AppTextStyle.w700(fontSize: 25, color: AppColors.primary),
+        ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              Text(
-                "What would you like to order",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-
-              SizedBox(height: 16),
-
-              // Search Bar
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Find for food and restaurant",
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 20),
-
-              // Categories (Burger, Donut, etc.)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [],
-              ),
-
-              SizedBox(height: 20),
-
-              // Featured Restaurants
-              Text(
-                "Featured Restaurants",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-
-              SizedBox(height: 12),
-
-              SizedBox(height: 20),
-
-              AuthCommanButton(
-                text: "logout",
-                onTap: () {
-                  box.write("isLoggedIn", false);
-                  Get.to(() => LoginScreen());
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Wrap the PageView with a fixed height Container
+            SizedBox(
+              height: 200, // Set an appropriate height
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: foodImages.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      height: 120,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.black, width: 3),
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            image: AssetImage(foodImages[index]),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                  );
                 },
               ),
-              // Popular Items
-              Text(
-                "Popular Items",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: SmoothPageIndicator(
+                controller: _pageController,
+                count: foodImages.length,
+                effect: WormEffect(
+                  dotColor: Colors.grey,
+                  activeDotColor: Colors.orange,
+                  dotHeight: 10,
+                  dotWidth: 10,
+                ),
               ),
-
-              SizedBox(height: 12),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "All Categories",
+                    style: AppTextStyle.w700(fontSize: 15),
+                  ),
+                  Text(
+                    "See All >",
+                    style: AppTextStyle.w700(fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 8,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      minRadius: 35,
+                      backgroundColor: AppColors.black,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          FontAwesome.burger_solid,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Food Hub Specials",
+                    style: AppTextStyle.w700(fontSize: 20),
+                  ),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    itemCount: 5,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Card(
+                        color: Colors.black87,
+                        elevation: 1,
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: AppColors.white,
+                                    width: 3,
+                                  ),
+                                  image: const DecorationImage(
+                                    image: AssetImage(AppImages.burger),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Chicken Burger",
+                                      style: AppTextStyle.w700(
+                                        fontSize: 15,
+                                        color: AppColors.white,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      "Price: ₹120",
+                                      style: AppTextStyle.w700(
+                                        fontSize: 15,
+                                        color: AppColors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.remove_red_eye),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.add_box),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

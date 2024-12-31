@@ -48,6 +48,9 @@ dependencies:
   flutter_csc_picker:
   image_picker: ^1.1.2
   intl_phone_number_input:
+  country_picker: ^2.0.27
+  icons_plus: ^5.0.0
+  smooth_page_indicator: ^1.2.0+3
 
 
 dev_dependencies:

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/const/text_style.dart';
-import 'package:food_hub_user/controller/location_controller.dart';
 import 'package:food_hub_user/controller/user_info_controller.dart';
 import 'package:food_hub_user/view/widget/auth_comman_button.dart';
 import 'package:food_hub_user/view/widget/auth_comman_title_text.dart';
@@ -24,215 +23,241 @@ class UserInfoScreen extends StatefulWidget {
 }
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
-  final LocationController _locationController = Get.put(LocationController());
   final UserInfoController _userInfoController = Get.put(UserInfoController());
   final TextEditingController mobile = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-  String? selectedGender = "";
+  String dbCountryCode = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: GetBuilder<LocationController>(builder: (locationController) {
-        return GetBuilder<UserInfoController>(
-          builder: (userInfoController) {
-            return SafeArea(
-              child: Stack(
-                children: [
-                  const Positioned(child: Image(image: AssetImage(AppImages.Circle1))),
-                  const Positioned(child: Image(image: AssetImage(AppImages.Circle2))),
-                  const Positioned(right: 0, child: Image(image: AssetImage(AppImages.Circle3))),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: SingleChildScrollView(
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const SizedBox(height: 20),
-                              20.sizeHeight,
-                              AuthCommanTitleText(
-                                text: "Sign Up Information",
-                                fontSize: 30,
-                              ),
-                              31.sizeHeight,
-                              Text("Mobile Number",
-                                  style: AppTextStyle.w300(
-                                      fontSize: 16, color: AppColors.labelTextColor)),
-                              12.sizeHeight,
-                              IntlPhoneField(
-                                validator: (p0) {
-                                  if (p0 == null || p0.number.isEmpty) {
-                                    return 'Phone number is required';
-                                  }
-                                  // Validate the phone number format using your custom validator
+      body: GetBuilder<UserInfoController>(
+        builder: (Controller) {
+          return SafeArea(
+            child: Stack(
+              children: [
+                const Positioned(child: Image(image: AssetImage(AppImages.Circle1))),
+                const Positioned(child: Image(image: AssetImage(AppImages.Circle2))),
+                const Positioned(right: 0, child: Image(image: AssetImage(AppImages.Circle3))),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(height: 20),
+                            20.sizeHeight,
+                            AuthCommanTitleText(
+                              text: "Sign Up Information",
+                              fontSize: 30,
+                            ),
+                            31.sizeHeight,
+                            Text("Mobile Number",
+                                style: AppTextStyle.w300(
+                                    fontSize: 16, color: AppColors.labelTextColor)),
+                            12.sizeHeight,
+                            IntlPhoneField(
+                              validator: (p0) {
+                                if (p0 == null || mobile.text.isEmpty) {
+                                  return 'Phone number is required';
+                                }
+                                // Validate the phone number format using your custom validator
 
-                                  return null; // Return null if validation passes
-                                },
-                                controller: mobile,
-                                initialValue: "",
-                                dropdownTextStyle: AppTextStyle.w600(
-                                  fontSize: 17,
-                                  color: const Color(0xff111719),
+                                return null; // Return null if validation passes
+                              },
+                              controller: mobile,
+                              initialValue: "",
+                              dropdownTextStyle: AppTextStyle.w600(
+                                fontSize: 17,
+                                color: const Color(0xff111719),
+                              ),
+                              style: AppTextStyle.w600(
+                                fontSize: 17,
+                                color: const Color(0xff111719),
+                              ),
+                              onChanged: (value) {
+                                dbCountryCode = value.countryCode;
+                              },
+                              initialCountryCode: "IN",
+                              decoration: InputDecoration(
+                                counterText: "",
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.borderColor),
                                 ),
-                                style: AppTextStyle.w600(
-                                  fontSize: 17,
-                                  color: const Color(0xff111719),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.errorColor),
                                 ),
-                                onTap: () {
-                                  print("===========>${locationController.country}");
-                                },
-                                initialCountryCode: "IN",
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.borderColor),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.errorColor),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.errorColor),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: AppColors.primary,
-                                    ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.errorColor),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ),
-                              20.sizeHeight,
-                              Text("Select CSC",
-                                  style: AppTextStyle.w300(
-                                      fontSize: 16, color: AppColors.labelTextColor)),
-                              12.sizeHeight,
-                              CSCPicker(
-                                dropdownItemStyle: AppTextStyle.w600(
-                                  fontSize: 17,
-                                  color: const Color(
-                                    0xff111719,
+                            ),
+                            20.sizeHeight,
+                            Text("Select Location",
+                                style: AppTextStyle.w300(
+                                    fontSize: 16, color: AppColors.labelTextColor)),
+                            12.sizeHeight,
+                            CSCPicker(
+                              dropdownItemStyle: AppTextStyle.w600(
+                                fontSize: 17,
+                                color: const Color(
+                                  0xff111719,
+                                ),
+                              ),
+                              cityDropdownLabel: "Select City",
+                              stateDropdownLabel: "Select State",
+                              disabledDropdownDecoration: BoxDecoration(color: Colors.white),
+                              layout: Layout.horizontal,
+                              searchBarRadius: 10,
+                              countryDropdownLabel: "Select Country",
+                              citySearchPlaceholder: "Select City",
+                              onCountryChanged: (value) {
+                                List<String> countryDetails = value.split(" ");
+                                String countryName = countryDetails.last
+                                    .replaceAll(RegExp(r'[()]'), ''); // Extract country code
+                                String countryCode = countryDetails.first;
+                                Controller.countryCode = countryCode.toLowerCase();
+                                Controller.countryName = countryName.toString();
+                              },
+                              onStateChanged: (value) {
+                                Controller.state = value ?? "";
+                              },
+                              onCityChanged: (value) {
+                                Controller.city = value ?? "";
+                              },
+                            ),
+                            31.sizeHeight,
+                            Text("Select Gender",
+                                style: AppTextStyle.w300(
+                                    fontSize: 16, color: AppColors.labelTextColor)),
+                            12.sizeHeight,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: RadioListTile<String>(
+                                    value: "Male",
+                                    groupValue: Controller.selectedGender,
+                                    title: Text("Male"),
+                                    onChanged: (value) {
+                                      Controller.updateGender(value!);
+                                    },
                                   ),
                                 ),
-                                cityDropdownLabel: "Select City",
-                                stateDropdownLabel: "Select State",
-                                disabledDropdownDecoration: BoxDecoration(color: Colors.white),
-                                layout: Layout.horizontal,
-                                searchBarRadius: 10,
-                                countryDropdownLabel: "Select Country",
-                                citySearchPlaceholder: "Select City",
-                                onCountryChanged: (value) {
-                                  locationController.country = value;
-                                  locationController.countryPhone = value;
-                                  locationController.country.removeAllWhitespace.toString();
-                                },
-                                onStateChanged: (value) {
-                                  locationController.state = value ?? "";
-                                },
-                                onCityChanged: (value) {
-                                  locationController.city = value ?? "";
-                                },
-                              ),
-                              31.sizeHeight,
-                              Text("Select Gender",
-                                  style: AppTextStyle.w300(
-                                      fontSize: 16, color: AppColors.labelTextColor)),
-                              12.sizeHeight,
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: RadioListTile<String>(
-                                      value: "Male",
-                                      groupValue: selectedGender,
-                                      title: Text("Male"),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedGender = value;
-                                        });
-                                      },
-                                    ),
+                                Expanded(
+                                  child: RadioListTile<String>(
+                                    value: "Female",
+                                    groupValue: Controller.selectedGender,
+                                    title: Text("Female"),
+                                    onChanged: (value) {
+                                      Controller.updateGender(value!);
+                                    },
                                   ),
-                                  Expanded(
-                                    child: RadioListTile<String>(
-                                      value: "Female",
-                                      groupValue: selectedGender,
-                                      title: Text("Female"),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedGender = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              31.sizeHeight,
-                              AuthCommanButton(
-                                onTap: () async {
-                                  if (_formKey.currentState?.validate() ?? false) {
-                                    if (mobile.text == null) {
-                                      Get.snackbar(
-                                          "Error", "Please select your country, state, and city",
-                                          snackPosition: SnackPosition.TOP,
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white);
-                                      return;
-                                    }
-                                    if (locationController.country.isEmpty ||
-                                        locationController.state.isEmpty ||
-                                        locationController.city.isEmpty) {
-                                      // Show error if any location field is empty
-                                      Get.snackbar(
-                                          "Error", "Please select your country, state, and city",
-                                          snackPosition: SnackPosition.TOP,
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white);
-                                      return;
-                                    }
-                                    if (selectedGender == null || selectedGender!.isEmpty) {
-                                      // Show error if gender is not selected
-                                      Get.snackbar("Error", "Please select your gender",
-                                          snackPosition: SnackPosition.TOP,
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white);
-                                      return;
-                                    }
+                                ),
+                              ],
+                            ),
+                            31.sizeHeight,
+                            AuthCommanButton(
+                              onTap: () async {
+                                // Check if all fields are valid
+                                if (!_formKey.currentState!.validate()) {}
 
-                                    // Proceed to save user information if all validations pass
-                                    userInfoController.userInformationData(
-                                        uid: widget.uid,
-                                        city: locationController.city,
-                                        country: locationController.country,
-                                        state: locationController.state,
-                                        gender: selectedGender!,
-                                        mobileNumber: mobile.text);
-                                  }
-                                },
-                                isLoading: userInfoController.isUpdate,
-                                text: "SAVE",
-                              ),
-                              32.sizeHeight,
-                            ],
-                          ),
+                                if (mobile.text.isEmpty) {
+                                  Get.snackbar(
+                                    "Error",
+                                    "Mobile Number is required.",
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                  return;
+                                }
+
+                                if (Controller.countryName.isEmpty) {
+                                  Get.snackbar(
+                                    "Error",
+                                    "Country is required. Please select your country.",
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                  return;
+                                }
+
+                                if (Controller.state.isEmpty) {
+                                  Get.snackbar(
+                                    "Error",
+                                    "State is required. Please select your state.",
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                  return;
+                                }
+
+                                if (Controller.city.isEmpty) {
+                                  Get.snackbar(
+                                    "Error",
+                                    "City is required. Please select your city.",
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                  return;
+                                }
+
+                                if (Controller.selectedGender.isEmpty) {
+                                  Get.snackbar(
+                                    "Error",
+                                    "Gender is required. Please select your gender.",
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                  );
+                                  return;
+                                }
+
+                                // If all validations pass, proceed with saving the information
+                                await Controller.userInformationData(
+                                  uid: widget.uid,
+                                  city: Controller.city,
+                                  countryName: Controller.countryName,
+                                  countryCode: Controller.countryCode,
+                                  state: Controller.state,
+                                  gender: Controller.selectedGender,
+                                  mobileNumber: "$dbCountryCode" + mobile.text,
+                                );
+                              },
+                              isLoading: Controller.isUpdate,
+                              text: "SAVE",
+                            ),
+                            32.sizeHeight,
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        );
-      }),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

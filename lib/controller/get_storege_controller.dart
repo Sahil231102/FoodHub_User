@@ -7,11 +7,11 @@ class GetStorageController extends GetxController {
   void checkUserData() async {
     var box = GetStorage();
     await Future.delayed(Duration(seconds: 2)); // Simulate splash screen delay
-    bool isLoggedIn = box.read('isLoggedIn') ?? false; // Default to false
+    bool isLoggedIn = box.read('isLoggedIn') ?? false; // Check if the user is logged in
     if (isLoggedIn) {
-      Get.to(() => HomeScreen());
+      Get.to(() => HomeScreen()); // Navigate to HomeScreen if logged in
     } else {
-      Get.to(() => WelcomeScreen());
+      Get.to(() => WelcomeScreen()); // Otherwise, show WelcomeScreen
     }
   }
 }

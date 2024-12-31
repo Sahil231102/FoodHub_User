@@ -4,10 +4,12 @@ class AppColors {
   //welcome text
 
   static const Color welcomeTextColor = Color(0xff30384F);
+
   //text Colors
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color red = Colors.red;
+  static const Color black = Colors.black;
 
   static const Color primary = Color(0xFFFE724C);
   static const Color borderColor = Color(0xFFEEEEEE);

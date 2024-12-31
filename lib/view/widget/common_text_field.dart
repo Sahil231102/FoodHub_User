@@ -10,6 +10,7 @@ class CommonTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? labelText;
   final bool obscureText;
+  final Widget? prefixIcon;
 
   final void Function()? onTap;
 
@@ -21,7 +22,8 @@ class CommonTextField extends StatelessWidget {
       this.hintText,
       this.labelText,
       this.obscureText = false,
-      this.onTap});
+      this.onTap,
+      this.prefixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class CommonTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: AppTextStyle.w400(color: AppColors.hintTextColor, fontSize: 17),
             suffixIcon: suffixIcon,
+            prefixIcon: prefixIcon,
             filled: true,
             fillColor: AppColors.textFormFieldFillColor,
             focusedBorder: _border(),

@@ -1,172 +1,152 @@
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/text_style.dart';
+import 'package:food_hub_user/services/get_storage_services.dart';
+import 'package:food_hub_user/view/auth/login_screen.dart';
+import 'package:food_hub_user/view/widget/sized_box.dart';
+import 'package:get/get.dart';
 
-class AnimatedSideMenu extends StatefulWidget {
-  final Function onClose; // Callback to close the drawer
-
-  AnimatedSideMenu({required this.onClose});
+class SideMenu extends StatefulWidget {
+  const SideMenu({super.key});
 
   @override
-  _AnimatedSideMenuState createState() => _AnimatedSideMenuState();
+  State<SideMenu> createState() => _SideMenuState();
 }
 
-class _AnimatedSideMenuState extends State<AnimatedSideMenu>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  bool isMenuOpen = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    )..forward(); // Open the menu initially
-  }
-
-  void closeMenu() {
-    _controller.reverse().then((_) {
-      widget.onClose(); // Trigger the close callback
-    });
-  }
+class _SideMenuState extends State<SideMenu> {
+  final GetStorageServices _GetStorageServices = Get.put(GetStorageServices());
 
   @override
   Widget build(BuildContext context) {
-    final double menuWidth = MediaQuery.of(context).size.width * 0.7;
-
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        double translateX = menuWidth * (1 - _controller.value);
-        return Transform.translate(
-          offset: Offset(-translateX, 0),
-          child: Container(
-            width: menuWidth,
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 50.0),
+    return SafeArea(
+      child: Drawer(
+        backgroundColor: Colors.white,
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+                decoration: const BoxDecoration(color: AppColors.primary),
+                accountName: Text(
+                  "Sahil Sorathiya",
+                  style: AppTextStyle.w600(fontSize: 17, color: AppColors.white),
+                ),
+                accountEmail: Flexible(
+                  child: Text(
+                    "sorathiyasahil5656@gmail.com",
+                    style: AppTextStyle.w600(fontSize: 15, color: AppColors.white),
+                  ),
+                ),
+                currentAccountPicture: CircleAvatar(
+                  minRadius: 20,
+                  backgroundColor: Colors.black87,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // User Profile
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundImage: NetworkImage(
-                            "https://cgfaces.com/collection/1024px/9f19a02b-a5f0-4bb8-a58b-d03ffc5ffd35.jpg"), // Replace with actual image URL
-                      ),
-                      SizedBox(height: 15),
                       Text(
-                        "Farion Wick",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "farionwick@gmail.com",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+                        "SS",
+                        style: AppTextStyle.bold(
+                          fontSize: 25,
+                          color: AppColors.white,
                         ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 40),
-                // Menu Items
-                MenuItem(icon: Icons.list_alt, text: "My Orders"),
-                MenuItem(icon: Icons.person, text: "My Profile"),
-                MenuItem(icon: Icons.location_on, text: "Delivery Address"),
-                MenuItem(icon: Icons.payment, text: "Payment Methods"),
-                MenuItem(icon: Icons.contact_mail, text: "Contact Us"),
-                MenuItem(icon: Icons.settings, text: "Settings"),
-                MenuItem(icon: Icons.help_outline, text: "Helps & FAQs"),
-                Spacer(),
-                // Log Out Button
-                GestureDetector(
-                  onTap: () {
-                    closeMenu(); // Close the menu
-                  },
-                  child: Row(
-                    children: [
-                      SizedBox(width: 10),
-                      Container(
-                        height: 43,
-                        width: 117,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(29),
+                )),
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+              ),
+              title: Text(
+                'My Profile',
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.food_bank),
+              title: Text(
+                'My Order',
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.payment),
+              title: Text(
+                'Payment Method',
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: Text(
+                'Delivery Address',
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.message,
+              ),
+              title: Text(
+                "Contact Us",
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.settings,
+              ),
+              title: Text(
+                'Settings',
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.help,
+              ),
+              title: Text(
+                'Helps',
+                style: AppTextStyle.w700(fontSize: 16),
+              ),
+              onTap: () {},
+            ),
+            120.sizeHeight,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 140,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _GetStorageServices.write("isLoggedIn", false);
+                      Get.to(() => LoginScreen());
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.power_settings_new,
+                          color: AppColors.white,
                         ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(9.0),
-                              child: Container(
-                                height: 26,
-                                width: 26,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.white,
-                                ),
-                                child: Icon(
-                                  Icons.power_settings_new_sharp,
-                                  color: AppColors.primary,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Text(
-                                "Log Out",
-                                style: AppTextStyle.w600(
-                                    color: AppColors.white, fontSize: 14),
-                              ),
-                            )
-                          ],
+                        5.sizeWidth,
+                        Text(
+                          "LOGOUT",
+                          style: AppTextStyle.w700(color: Colors.white, fontSize: 15),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-}
-
-class MenuItem extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  MenuItem({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.black),
-          SizedBox(width: 15),
-          Text(
-            text,
-            style: TextStyle(fontSize: 16),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -35,11 +35,14 @@ class SignupController extends GetxController {
           "last_login_time": DateTime.now(),
         });
 
-        if (userid != null) {
-          Get.to(() => UserInfoScreen(
-                uid: userid,
-              ));
-          AppSnackbar.showError(
+        if (userid.isNotEmpty) {
+          Get.offAll(
+            () => UserInfoScreen(
+              uid: userid,
+            ),
+          );
+
+          AppSnackbar.showSuccess(
               message: "Welcome! You have successfully signed up.", title: "Sign Up Successful");
         }
       } on FirebaseAuthException catch (e) {

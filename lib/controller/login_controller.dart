@@ -25,28 +25,27 @@ class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  Future<void> emailLogin(
-      {required String email, required String password}) async {
+  Future<void> emailLogin({required String email, required String password}) async {
     try {
       isLoginCircular = true;
       update();
 
-      final userData =
-          await FirebaseServices.firebaseAuth.signInWithEmailAndPassword(
+      final userData = await FirebaseServices.firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (userData.user?.uid != null) {
-        await _getStorageServices.write("email", emailController);
-        await _getStorageServices.write("password", passwordController.text);
+        _getStorageServices.write("email", emailController.text); // Save the email correctly
+        _getStorageServices.write("password", passwordController.text);
+        _getStorageServices.write('isLoggedIn', true); // Save the login status correctly
 
         await FirebaseServices.useFirestore.doc(userData.user?.uid).update({
           "last_login_time": DateTime.now().toIso8601String(),
         });
 
         Get.to(() => HomeScreen());
-        AppSnackbar.showSuccess(message: 'Operation completed successfully.');
+        AppSnackbar.showSuccess(message: 'Login successful!');
       }
     } on FirebaseAuthException catch (e) {
       String getErrorMessage(FirebaseAuthException e) {

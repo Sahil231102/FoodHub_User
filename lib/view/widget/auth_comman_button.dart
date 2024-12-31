@@ -31,6 +31,7 @@ class AuthCommanButton extends StatelessWidget {
             child: isLoading
                 ? const CircularProgressIndicator(
                     backgroundColor: AppColors.white,
+                    color: Colors.black,
                   )
                 : Text(
                     text ?? "",
