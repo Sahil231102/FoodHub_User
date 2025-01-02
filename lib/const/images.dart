@@ -12,6 +12,7 @@ class AppImages {
   static const String page_2 = "$_data/page_2.jpg";
   static const String page_3 = "$_data/page_3.jpg";
   static const String page_4 = "$_data/page_4.jpg";
+  static const String user = "$_data/user.png";
 
 // svgs
 }

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/firebase_options.dart';
-import 'package:food_hub_user/view/home/home_screen.dart';
+import 'package:food_hub_user/view/widget/bottom_navigation_bar_screen.dart';
 import 'package:get/get.dart';
 
 import 'services/get_storage_services.dart';
@@ -23,13 +23,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: 'sp',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: HomeScreen(),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          fontFamily: 'sp',
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: BottomNavigationBarScreen());
   }
 }

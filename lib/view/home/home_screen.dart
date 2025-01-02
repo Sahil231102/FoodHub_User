@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/const/text_style.dart';
-import 'package:food_hub_user/view/home/side_menu.dart';
+import 'package:food_hub_user/view/widget/common_app_bar.dart';
+import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -26,21 +27,16 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(items: items),
       backgroundColor: Colors.white,
-      drawer: const SideMenu(),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Welcome!",
-          style: AppTextStyle.w700(fontSize: 25, color: AppColors.primary),
-        ),
+      appBar: const CommonAppBar(
+        text: "Welcome Sahil Sorathiya!",
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            20.sizeHeight,
             // Wrap the PageView with a fixed height Container
             SizedBox(
               height: 200, // Set an appropriate height
@@ -116,109 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Food Hub Specials",
-                    style: AppTextStyle.w700(fontSize: 20),
-                  ),
-                  const SizedBox(height: 10),
-                  ListView.builder(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Card(
-                        color: Colors.black87,
-                        elevation: 1,
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 100,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: AppColors.white,
-                                    width: 3,
-                                  ),
-                                  image: const DecorationImage(
-                                    image: AssetImage(AppImages.burger),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Chicken Burger",
-                                      style: AppTextStyle.w700(
-                                        fontSize: 15,
-                                        color: AppColors.white,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      "Price: ₹120",
-                                      style: AppTextStyle.w700(
-                                        fontSize: 15,
-                                        color: AppColors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              Column(
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.remove_red_eye),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.add_box),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
               ),
             ),
           ],
