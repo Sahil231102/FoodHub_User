@@ -4,7 +4,9 @@ import 'package:food_hub_user/const/text_style.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 
 class CommonTextField extends StatelessWidget {
-  final TextEditingController controller;
+  final bool? readOnly;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
   final Widget? suffixIcon;
   final String? hintText;
   final String? Function(String?)? validator;
@@ -16,14 +18,16 @@ class CommonTextField extends StatelessWidget {
 
   const CommonTextField(
       {super.key,
-      required this.controller,
+      this.controller,
       this.suffixIcon,
       this.validator,
       this.hintText,
       this.labelText,
       this.obscureText = false,
       this.onTap,
-      this.prefixIcon});
+      this.prefixIcon,
+      this.readOnly,
+      this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,8 @@ class CommonTextField extends StatelessWidget {
             style: AppTextStyle.w300(fontSize: 16, color: AppColors.labelTextColor)),
         12.sizeHeight,
         TextFormField(
+          keyboardType: keyboardType ?? TextInputType.text,
+          readOnly: readOnly ?? false,
           onTap: onTap,
           obscureText: obscureText,
           controller: controller,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/services/get_storage_services.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
+import 'package:food_hub_user/view/home/Address_screen.dart';
+import 'package:food_hub_user/view/home/profile_screen.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
 
@@ -32,11 +34,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   "Sahil Sorathiya",
                   style: AppTextStyle.w600(fontSize: 17, color: AppColors.white),
                 ),
-                accountEmail: Flexible(
-                  child: Text(
-                    "sorathiyasahil5656@gmail.com",
-                    style: AppTextStyle.w600(fontSize: 15, color: AppColors.white),
-                  ),
+                accountEmail: Text(
+                  "sorathiyasahil5656@gmail.com",
+                  style: AppTextStyle.w600(fontSize: 15, color: AppColors.white),
                 ),
                 currentAccountPicture: CircleAvatar(
                   minRadius: 20,
@@ -62,7 +62,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 'My Profile',
                 style: AppTextStyle.w700(fontSize: 16),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.to(() => ProfileScreen());
+              },
             ),
             ListTile(
               leading: const Icon(Icons.food_bank),
@@ -86,7 +88,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 'Delivery Address',
                 style: AppTextStyle.w700(fontSize: 16),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.to(() => AddressScreen());
+              },
             ),
             ListTile(
               leading: const Icon(
@@ -118,7 +122,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               onTap: () {},
             ),
-            120.sizeHeight,
+            20.sizeHeight,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

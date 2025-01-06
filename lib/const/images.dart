@@ -14,5 +14,10 @@ class AppImages {
   static const String page_4 = "$_data/page_4.jpg";
   static const String user = "$_data/user.png";
 
+  static const String paneer_Sabji = "$_data/paneer_sabji.webp";
+  static const String Panjabi_thali = "$_data/Panjabi_thali.webp";
+  static const String Gujarati_thali = "$_data/Gujarati_thali.webp";
+  static const String Cold_drink = "$_data/Cold_drink.png";
+
 // svgs
 }

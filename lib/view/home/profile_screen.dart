@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/text_style.dart';
 import 'package:food_hub_user/view/widget/common_app_bar.dart';
-import 'package:get/get.dart';
+import 'package:food_hub_user/view/widget/sized_box.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,107 +15,106 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: const CommonAppBar(
         text: "Profile",
       ),
-      body: Column(
-        children: [
-          UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xff808080)),
-              accountName: Text(
-                "Sahil Sorathiya",
-                style: AppTextStyle.w600(fontSize: 17, color: AppColors.white),
-              ),
-              accountEmail: Flexible(
-                child: Text(
-                  "sorathiyasahil5656@gmail.com",
-                  style: AppTextStyle.w600(fontSize: 15, color: AppColors.white),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              backgroundColor: AppColors.black,
+              minRadius: 50,
+              child: Text(
+                "SS",
+                style: AppTextStyle.w700(
+                  fontSize: 30,
+                  color: AppColors.white,
                 ),
               ),
-              currentAccountPicture: CircleAvatar(
-                minRadius: 20,
-                backgroundColor: Colors.black87,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "SS",
-                      style: AppTextStyle.bold(
-                        fontSize: 25,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ],
+            ),
+            20.sizeHeight,
+            Text(
+              "Name",
+              style: AppTextStyle.w700(fontSize: 18),
+            ),
+            10.sizeHeight,
+            TextField(
+              autofocus: false,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: "Sahil Sorathiya",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              )),
-          ListTile(
-            onLongPress: () {
-              Get.to(() => ProfileScreen());
-            },
-            leading: const Icon(
-              Icons.person,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
-            title: Text(
-              'My Profile',
-              style: AppTextStyle.w700(fontSize: 16),
+            10.sizeHeight,
+            Text(
+              "Email",
+              style: AppTextStyle.w700(fontSize: 18),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.food_bank),
-            title: Text(
-              'My Order',
-              style: AppTextStyle.w700(fontSize: 16),
+            10.sizeHeight,
+            TextField(
+              autofocus: false,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: "sorathiyasahil5656@gmail.com",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.payment),
-            title: Text(
-              'Payment Method',
-              style: AppTextStyle.w700(fontSize: 16),
+            10.sizeHeight,
+            Text(
+              "Mobile Number",
+              style: AppTextStyle.w700(
+                fontSize: 18,
+              ),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.location_on),
-            title: Text(
-              'Delivery Address',
-              style: AppTextStyle.w700(fontSize: 16),
+            10.sizeHeight,
+            TextField(
+              autofocus: false,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: "+919909498426",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.message,
+            10.sizeHeight,
+            Text(
+              "Gender",
+              style: AppTextStyle.w700(fontSize: 18),
             ),
-            title: Text(
-              "Contact Us",
-              style: AppTextStyle.w700(fontSize: 16),
+            10.sizeHeight,
+            TextField(
+              autofocus: false,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: "Male",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings,
-            ),
-            title: Text(
-              'Settings',
-              style: AppTextStyle.w700(fontSize: 16),
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.help,
-            ),
-            title: Text(
-              'Helps',
-              style: AppTextStyle.w700(fontSize: 16),
-            ),
-            onTap: () {},
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

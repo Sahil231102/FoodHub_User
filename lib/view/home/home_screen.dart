@@ -4,7 +4,6 @@ import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/const/text_style.dart';
 import 'package:food_hub_user/view/widget/common_app_bar.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +23,19 @@ class _HomeScreenState extends State<HomeScreen> {
       AppImages.page_2,
       AppImages.page_3,
       AppImages.page_4,
+    ];
+
+    final List<String> categories_Images = [
+      AppImages.Gujarati_thali,
+      AppImages.paneer_Sabji,
+      AppImages.Panjabi_thali,
+      AppImages.Cold_drink,
+    ];
+    final List<String> categories_Name = [
+      "Gujarati Thali",
+      "Paneer Sabzi",
+      "Panjabi Thali",
+      "Cold Drink",
     ];
 
     return Scaffold(
@@ -65,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SmoothPageIndicator(
                 controller: _pageController,
                 count: foodImages.length,
-                effect: WormEffect(
+                effect: const WormEffect(
                   dotColor: Colors.grey,
                   activeDotColor: Colors.orange,
                   dotHeight: 10,
@@ -83,32 +95,172 @@ class _HomeScreenState extends State<HomeScreen> {
                     "All Categories",
                     style: AppTextStyle.w700(fontSize: 15),
                   ),
-                  Text(
-                    "See All >",
-                    style: AppTextStyle.w700(fontSize: 15),
-                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "See All >",
+                      style: AppTextStyle.w700(
+                        fontSize: 15,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
+
             SizedBox(
               width: double.infinity,
-              height: 100,
+              height: 130,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 8,
+                itemCount: categories_Images.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      minRadius: 35,
-                      backgroundColor: AppColors.black,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          FontAwesome.burger_solid,
-                          color: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Container(
+                        height: 100,
+                        width: 130,
+                        decoration: BoxDecoration(
+                          color: AppColors.black,
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                        categories_Images[index],
+                                      ),
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                              10.sizeHeight,
+                              Text(
+                                categories_Name[index],
+                                style: AppTextStyle.w700(color: AppColors.white, fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ));
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Today Special",
+                    style: AppTextStyle.w700(fontSize: 15),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "See All >",
+                      style: AppTextStyle.w700(
+                        fontSize: 15,
                       ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            SizedBox(
+              height: 210,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Stack(
+                      children: [
+                        Card(
+                          color: Colors.black,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Container(
+                                  height: 80,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                          AppImages.burger,
+                                        ),
+                                        fit: BoxFit.cover),
+                                    border: Border.all(color: AppColors.white),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Chicken Burger",
+                                          style: AppTextStyle.w700(
+                                              color: AppColors.white, fontSize: 17),
+                                        ),
+                                        Text(
+                                          "₹120",
+                                          style: AppTextStyle.w700(
+                                            color: AppColors.white,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 15,
+                          right: 12,
+                          child: Container(
+                              height: 35,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(
+                                  20,
+                                ),
+                              ),
+                              child: TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    "View",
+                                    style: AppTextStyle.w700(fontSize: 16),
+                                  ))),
+                        )
+                      ],
                     ),
                   );
                 },

@@ -38,13 +38,13 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
             ),
           ),
           BottomNavigationBarItem(
-            label: "Food",
+            label: "Search",
             icon: Icon(
-              Icons.food_bank,
+              Icons.search_rounded,
             ),
           ),
           BottomNavigationBarItem(
-            label: "Cart",
+            label: "Checkout",
             icon: Icon(Icons.shopping_cart),
           ),
           BottomNavigationBarItem(
