@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseCollectionNAmes {
   static const user = "user";
+  static const foodItems = "FoodItems";
 }
 
 class FirebaseServices {
@@ -10,4 +11,7 @@ class FirebaseServices {
 
   static CollectionReference<Map<String, dynamic>> useFirestore =
       FirebaseFirestore.instance.collection(FirebaseCollectionNAmes.user);
+
+  static CollectionReference<Map<String, dynamic>> foodFirestore =
+      FirebaseFirestore.instance.collection(FirebaseCollectionNAmes.foodItems);
 }

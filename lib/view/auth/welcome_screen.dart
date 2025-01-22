@@ -87,7 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     onPressed: () {
                       Get.to(SignupScreen());
                     },
-                    child: Text(
+                    child: const Text(
                       "Start with email",
                       style:
                           TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
@@ -98,18 +98,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
+                  20.sizeHeight,
+                  const Text(
                     "Already have an account?",
                     style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
                   TextButton(
                       onPressed: () {
-                        Get.to(LoginScreen());
+                        Get.to(const LoginScreen());
                       },
-                      child: Text(
+                      child: const Text(
                         "Sign In",
                         style: TextStyle(
                           color: Colors.white,

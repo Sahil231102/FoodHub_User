@@ -93,14 +93,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     "All Categories",
-                    style: AppTextStyle.w700(fontSize: 15),
+                    style: AppTextStyle.w700(fontSize: 20),
                   ),
                   TextButton(
                     onPressed: () {},
                     child: Text(
                       "See All >",
                       style: AppTextStyle.w700(
-                        fontSize: 15,
+                        fontSize: 17,
                       ),
                     ),
                   )
@@ -160,14 +160,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     "Today Special",
-                    style: AppTextStyle.w700(fontSize: 15),
+                    style: AppTextStyle.w700(fontSize: 20),
                   ),
                   TextButton(
                     onPressed: () {},
                     child: Text(
                       "See All >",
                       style: AppTextStyle.w700(
-                        fontSize: 15,
+                        fontSize: 17,
                       ),
                     ),
                   )

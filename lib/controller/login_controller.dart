@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/services/firebase_services.dart';
-import 'package:food_hub_user/view/home/home_screen.dart';
 import 'package:food_hub_user/view/widget/app_snackbar.dart';
+import 'package:food_hub_user/view/widget/bottom_navigation_bar_screen.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -44,7 +44,7 @@ class LoginController extends GetxController {
           "last_login_time": DateTime.now().toIso8601String(),
         });
 
-        Get.to(() => HomeScreen());
+        Get.to(() => BottomNavigationBarScreen());
         AppSnackbar.showSuccess(message: 'Login successful!');
       }
     } on FirebaseAuthException catch (e) {
