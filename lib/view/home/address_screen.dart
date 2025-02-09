@@ -1,6 +1,7 @@
-import 'package:credit_card_form/credit_card_form.dart';
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/services/navigation_services.dart';
+import 'package:food_hub_user/view/home/online_payment_screen.dart';
 import 'package:food_hub_user/view/widget/auth_comman_button.dart';
 import 'package:food_hub_user/view/widget/common_app_bar.dart';
 import 'package:food_hub_user/view/widget/common_text_field.dart';
@@ -126,8 +127,8 @@ class _AddressScreenState extends State<AddressScreen> {
                     ),
                     Expanded(
                       child: RadioListTile(
-                        title: const Text("CARD"),
-                        value: "CARD",
+                        title: const Text("ONLINE"),
+                        value: "ONLINE",
                         groupValue: _selectPaymentMethod,
                         onChanged: (value) {
                           setState(() {
@@ -138,24 +139,13 @@ class _AddressScreenState extends State<AddressScreen> {
                     ),
                   ],
                 ),
-                if (_selectPaymentMethod == "CARD") ...[
-                  CreditCardForm(
-                    cvcLength: 3,
-                    theme: CreditCardLightTheme(),
-                    onChanged: (CreditCardResult result) {
-                      cardNumberController = result.cardNumber;
-                      cardHolderNameController = result.cardHolderName;
-                      expiryDateController = result.expirationMonth;
-                      expiryYearController = result.expirationYear;
-                      cardType = result.cardType as String?;
-                      cvvController = result.cvc;
-                    },
-                  ),
+                if (_selectPaymentMethod == "ONLINE") ...[
                   20.sizeHeight,
                   AuthCommanButton(
-                    text: "Pay With Card",
+                    text: "Pay With ONLINE",
                     onTap: () {
                       if (_formKey.currentState?.validate() ?? false) {
+                        NavigationServices.to(() => const OnlinePaymentScreen());
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Processing Card Payment...")),
                         );

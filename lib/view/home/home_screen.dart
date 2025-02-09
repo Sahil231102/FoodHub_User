@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/const/text_style.dart';
+import 'package:food_hub_user/services/navigation_services.dart';
+import 'package:food_hub_user/view/home/food_screen.dart';
 import 'package:food_hub_user/view/widget/common_app_bar.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -32,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
       AppImages.Cold_drink,
     ];
     final List<String> categories_Name = [
-      "Gujarati Thali",
-      "Paneer Sabzi",
+      "Gujarati",
+      "Burgers",
       "Panjabi Thali",
       "Cold Drink",
     ];
@@ -116,37 +118,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: categories_Images.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Container(
-                        height: 100,
-                        width: 130,
-                        decoration: BoxDecoration(
-                          color: AppColors.black,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 80,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                        categories_Images[index],
-                                      ),
-                                      fit: BoxFit.cover),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: GestureDetector(
+                        onTap: () {
+                          NavigationServices.to(
+                            () => FoodScreen(
+                              foodCategory: categories_Name[index],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 100,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            color: AppColors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 80,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                          categories_Images[index],
+                                        ),
+                                        fit: BoxFit.cover),
+                                  ),
                                 ),
-                              ),
-                              10.sizeHeight,
-                              Text(
-                                categories_Name[index],
-                                style: AppTextStyle.w700(color: AppColors.white, fontSize: 15),
-                              ),
-                            ],
+                                10.sizeHeight,
+                                Text(
+                                  categories_Name[index],
+                                  style: AppTextStyle.w700(color: AppColors.white, fontSize: 15),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ));

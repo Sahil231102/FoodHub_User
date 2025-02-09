@@ -25,7 +25,7 @@ class AppTextStyle {
     return TextStyle(
       fontWeight: FontWeight.w500,
       color: color ?? Colors.black,
-      fontSize: 12,
+      fontSize: fontSize ?? 12,
       fontFamily: _data,
     );
   }

@@ -15,7 +15,6 @@ class AppSnackbar {
     );
   }
 
-  /// Shows an error snackbar
   static void showError({required String message, String? title}) {
     _showSnackbar(
       message: message,
@@ -35,6 +34,7 @@ class AppSnackbar {
     Get.snackbar(
       title,
       message,
+      snackStyle: SnackStyle.FLOATING,
       snackPosition: SnackPosition.TOP,
       backgroundColor: backgroundColor,
       colorText: Colors.white,

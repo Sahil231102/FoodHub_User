@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/services/get_storage_services.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
-import 'package:food_hub_user/view/home/Address_screen.dart';
 import 'package:food_hub_user/view/home/profile_screen.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
@@ -73,24 +72,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 style: AppTextStyle.w700(fontSize: 16),
               ),
               onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.payment),
-              title: Text(
-                'Payment Method',
-                style: AppTextStyle.w700(fontSize: 16),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.location_on),
-              title: Text(
-                'Delivery Address',
-                style: AppTextStyle.w700(fontSize: 16),
-              ),
-              onTap: () {
-                Get.to(() => AddressScreen());
-              },
             ),
             ListTile(
               leading: const Icon(

@@ -18,6 +18,7 @@ class AppImages {
   static const String Panjabi_thali = "$_data/Panjabi_thali.webp";
   static const String Gujarati_thali = "$_data/Gujarati_thali.webp";
   static const String Cold_drink = "$_data/Cold_drink.png";
+  static const String emptyCart = "$_data/empty-cart.png";
 
 // svgs
 }

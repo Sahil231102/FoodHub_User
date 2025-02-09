@@ -6,38 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:food_hub_user/const/colors.dart';
 import 'package:food_hub_user/const/text_style.dart';
 import 'package:food_hub_user/services/firebase_services.dart';
+import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:food_hub_user/view/home/food_details_screen.dart';
 import 'package:food_hub_user/view/widget/common_app_bar.dart';
 import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
 
 class FoodScreen extends StatefulWidget {
-  const FoodScreen({super.key});
+  final String? foodCategory;
+
+  const FoodScreen({super.key, this.foodCategory});
 
   @override
   State<FoodScreen> createState() => _FoodScreenState();
 }
 
 class _FoodScreenState extends State<FoodScreen> {
-  // Sample food items
-  // final List<Map<String, String>> foodItems = [
-  //   {'name': 'Chicken Burger', 'price': '₹120', 'image': AppImages.page_2},
-  //   {'name': 'Veg Pizza', 'price': '₹150', 'image': AppImages.page_4}, // Add your food data here
-  //   {'name': 'Cheese Sandwich', 'price': '₹80', 'image': AppImages.burger},
-
-  // Add more food items as required
-  // ];
-
-  // For storing search query
   String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
-    // Filter the list based on search query
-
     return Scaffold(
-      appBar: const CommonAppBar(
-        text: "Food",
+      appBar: CommonAppBar(
+        text: widget.foodCategory ?? "Food",
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -47,13 +38,12 @@ class _FoodScreenState extends State<FoodScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Search Bar
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextField(
                       onChanged: (query) {
                         setState(() {
-                          searchQuery = query;
+                          searchQuery = query.trim().toLowerCase();
                         });
                       },
                       decoration: InputDecoration(
@@ -69,8 +59,6 @@ class _FoodScreenState extends State<FoodScreen> {
                       ),
                     ),
                   ),
-
-                  // Food List
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseServices.foodFirestore.snapshots(),
                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -112,122 +100,123 @@ class _FoodScreenState extends State<FoodScreen> {
                       }
 
                       final List<DocumentSnapshot> foodItems = snapshot.data!.docs;
-                      final filteredFoodItems = foodItems
-                          .where((food) => (food['food_category']?.toString().toLowerCase() ?? '')
-                              .contains(searchQuery.toLowerCase()))
-                          .toList();
 
-                      return ListView.builder(
-                        itemCount: filteredFoodItems.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final food = filteredFoodItems[index];
-                          final String foodName = food['food_name'] ?? 'No Name';
-                          final String foodCategory = food['food_category'] ?? 'No Category';
-                          final String foodPrice = food['food_price'] ?? '0';
-                          final List<dynamic> base64Images = food['images'] ?? [];
-                          Uint8List? firstImageBytes;
+                      // Filtering logic based on category and search query
+                      final List<DocumentSnapshot> filteredFoodItems = foodItems.where((food) {
+                        String category = food['food_category']?.toString().toLowerCase() ?? '';
+                        String name = food['food_name']?.toString().toLowerCase() ?? '';
 
-                          if (base64Images.isNotEmpty) {
-                            try {
-                              firstImageBytes = base64Decode(base64Images[0]) as Uint8List?;
-                            } catch (e) {
-                              Get.snackbar("Error", e.toString());
-                            }
-                          }
-                          return Stack(
-                            children: [
-                              Card(
-                                color: Colors.black87,
-                                elevation: 1,
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: AppColors.white,
-                                            width: 3,
-                                          ),
-                                          image: DecorationImage(
-                                            image: MemoryImage(firstImageBytes!),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              foodName,
-                                              style: AppTextStyle.w700(
-                                                fontSize: 18,
-                                                color: AppColors.white,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            5.sizeHeight,
-                                            Text(
-                                              "Price: ${foodPrice}",
-                                              style: AppTextStyle.w700(
-                                                fontSize: 18,
-                                                color: AppColors.white,
-                                              ),
-                                            ),
-                                            5.sizeHeight,
-                                            Text(
-                                              foodCategory,
-                                              style: AppTextStyle.w700(
-                                                fontSize: 18,
-                                                color: AppColors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                    ],
+                        bool matchesCategory = widget.foodCategory == null ||
+                            category == widget.foodCategory!.toLowerCase();
+                        bool matchesSearch = searchQuery.isEmpty || name.contains(searchQuery);
+
+                        return matchesCategory && matchesSearch;
+                      }).toList();
+
+                      return filteredFoodItems.isEmpty
+                          ? Center(
+                              child: Column(
+                                children: [
+                                  const Image(
+                                    image:
+                                        AssetImage("assets/no_data.png"), // Update with your asset
+                                    height: 420,
+                                    width: 400,
                                   ),
-                                ),
+                                  Text("No Food Items Found",
+                                      style: AppTextStyle.w700(fontSize: 20)),
+                                ],
                               ),
-                              Positioned(
-                                bottom: 15,
-                                right: 12,
-                                child: Container(
-                                  height: 35,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(
-                                      20,
+                            )
+                          : ListView.builder(
+                              itemCount: filteredFoodItems.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final food = filteredFoodItems[index];
+                                final String foodName = food['food_name'] ?? 'No Name';
+                                final String foodCategory = food['food_category'] ?? 'No Category';
+                                final String foodPrice = food['food_price'] ?? '0';
+                                final List<dynamic> base64Images = food['images'] ?? [];
+                                Uint8List? firstImageBytes;
+
+                                if (base64Images.isNotEmpty) {
+                                  try {
+                                    firstImageBytes = base64Decode(base64Images[0]) as Uint8List?;
+                                  } catch (e) {
+                                    Get.snackbar("Error", e.toString());
+                                  }
+                                }
+
+                                return GestureDetector(
+                                  onTap: () => NavigationServices.to(
+                                    () => FoodDetailsScreen(document_id: food['food_id']),
+                                  ),
+                                  child: Card(
+                                    color: Colors.black87,
+                                    elevation: 1,
+                                    margin: const EdgeInsets.symmetric(vertical: 5),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height: 100,
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: AppColors.white,
+                                                width: 3,
+                                              ),
+                                              image: firstImageBytes != null
+                                                  ? DecorationImage(
+                                                      image: MemoryImage(firstImageBytes),
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : null,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  foodName,
+                                                  style: AppTextStyle.w700(
+                                                    fontSize: 18,
+                                                    color: AppColors.white,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                5.sizeHeight,
+                                                Text(
+                                                  "Price: $foodPrice",
+                                                  style: AppTextStyle.w700(
+                                                    fontSize: 18,
+                                                    color: AppColors.white,
+                                                  ),
+                                                ),
+                                                5.sizeHeight,
+                                                Text(
+                                                  foodCategory,
+                                                  style: AppTextStyle.w700(
+                                                    fontSize: 18,
+                                                    color: AppColors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.to(() => FoodDetailsScreen(
-                                            document_id: food['food_id'],
-                                          ));
-                                    },
-                                    child: Text(
-                                      "View",
-                                      style: AppTextStyle.w700(fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      );
+                                );
+                              },
+                            );
                     },
                   )
                 ],
