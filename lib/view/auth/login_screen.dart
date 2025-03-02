@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/Icons.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/login_controller.dart';
+import 'package:food_hub_user/core/const/colors.dart';
+import 'package:food_hub_user/core/const/icons.dart';
+import 'package:food_hub_user/core/const/images.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/validator.dart';
 import 'package:food_hub_user/view/auth/reset_password_screen.dart';
 import 'package:food_hub_user/view/auth/signup_screen.dart';
-import 'package:food_hub_user/view/widget/auth_comman_button.dart';
-import 'package:food_hub_user/view/widget/auth_comman_title_text.dart';
-import 'package:food_hub_user/view/widget/common_text_field.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
+
+import '../../core/component/auth_comman_button.dart';
+import '../../core/component/auth_comman_title_text.dart';
+import '../../core/component/common_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,9 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
           return SafeArea(
             child: Stack(
               children: [
-                const Positioned(child: Image(image: AssetImage(AppImages.Circle1))),
-                const Positioned(child: Image(image: AssetImage(AppImages.Circle2))),
-                const Positioned(right: 0, child: Image(image: AssetImage(AppImages.Circle3))),
+                const Positioned(child: Image(image: AssetImage(AppImages.circle1))),
+                const Positioned(child: Image(image: AssetImage(AppImages.circle2))),
+                const Positioned(right: 0, child: Image(image: AssetImage(AppImages.circle3))),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),

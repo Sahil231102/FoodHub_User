@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/images.dart';
-import 'package:food_hub_user/const/text_style.dart';
 import 'package:food_hub_user/controller/add_to_cart_controller.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:food_hub_user/view/home/address_screen.dart';
-import 'package:food_hub_user/view/widget/common_app_bar.dart';
 import 'package:get/get.dart';
 
-import '../widget/auth_comman_button.dart';
+import '../../core/component/common_app_bar.dart';
+import '../../core/component/common_button.dart';
+import '../../core/const/colors.dart';
+import '../../core/const/text_style.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -32,7 +32,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(
+      appBar: const CommonAppBar(
         text: "Cart",
       ),
       body: GetBuilder<AddToCartController>(builder: (controller) {
@@ -41,12 +41,13 @@ class _CartScreenState extends State<CartScreen> {
         }
         if (controller.cartItems.isEmpty) {
           return Center(
-            child: Image.asset(
-              AppImages.emptyCart,
-              height: 300,
-              width: 300,
+              child: Text(
+            "Your cart is empty !",
+            style: AppTextStyle.w700(
+              fontSize: 19,
+              color: AppColors.black,
             ),
-          );
+          ));
         }
 
         int totalItems = controller.cartItems
@@ -75,27 +76,33 @@ class _CartScreenState extends State<CartScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     elevation: 2,
                     child: Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(15),
                       child: Row(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.memory(
-                              imageBytes!,
-                              height: 80,
-                              width: 80,
-                              fit: BoxFit.cover,
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(width: 3, color: AppColors.white),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: MemoryImage(imageBytes!),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(item['productName'],
-                                    style: AppTextStyle.w700(fontSize: 17, color: AppColors.white)),
+                                10.sizeHeight,
+                                Text(item['name'],
+                                    style: AppTextStyle.w700(fontSize: 15, color: AppColors.white)),
+                                5.sizeHeight,
                                 Text("₹${double.tryParse(item['price'].toString())?.toInt() ?? 0}",
-                                    style: AppTextStyle.w600(fontSize: 16, color: AppColors.white)),
+                                    style: AppTextStyle.w600(fontSize: 15, color: AppColors.white)),
                                 Row(
                                   children: [
                                     IconButton(
@@ -104,10 +111,14 @@ class _CartScreenState extends State<CartScreen> {
                                             int.tryParse(item['quantity'].toString()) ?? 1;
                                         if (currentQuantity > 1) {
                                           controller.updateQuantity(
-                                              item['productId'], currentQuantity - 1);
+                                              item['foodId'], currentQuantity - 1);
                                         }
                                       },
-                                      icon: Icon(Icons.remove_circle, color: Colors.grey.shade700),
+                                      icon: Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.grey.shade700,
+                                        size: 25,
+                                      ),
                                     ),
                                     Text("${int.tryParse(item['quantity'].toString()) ?? 1}",
                                         style: AppTextStyle.w700(
@@ -117,9 +128,13 @@ class _CartScreenState extends State<CartScreen> {
                                         int currentQuantity =
                                             int.tryParse(item['quantity'].toString()) ?? 1;
                                         controller.updateQuantity(
-                                            item['productId'], currentQuantity + 1);
+                                            item['foodId'], currentQuantity + 1);
                                       },
-                                      icon: Icon(Icons.add_circle, color: Colors.grey.shade700),
+                                      icon: Icon(
+                                        Icons.add_circle,
+                                        color: Colors.grey.shade700,
+                                        size: 25,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -128,7 +143,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              controller.removeFromCart(item['productId']);
+                              controller.removeFromCart(item['foodId']);
                             },
                             icon: Icon(Icons.cancel, color: Colors.grey.shade700),
                           ),
@@ -187,14 +202,18 @@ class _CartScreenState extends State<CartScreen> {
                           style: AppTextStyle.w700(fontSize: 18, color: AppColors.black)),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  AuthCommanButton(
-                      text: "Confirm",
-                      onTap: () {
-                        NavigationServices.to(
-                          () => const AddressScreen(),
-                        );
-                      }),
+                  20.sizeHeight,
+                  CommonButton(
+                    onPressed: () {
+                      int totalAmount = controller.getTotalPrice() + 50;
+                      NavigationServices.to(
+                        () => AddressScreen(
+                          payment: totalAmount.toString(),
+                        ),
+                      );
+                    },
+                    text: "Confirm",
+                  )
                 ],
               ),
             ),

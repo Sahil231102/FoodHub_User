@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/text_style.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/get_storage_services.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
+
+import '../../core/const/colors.dart';
+import '../../core/const/text_style.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -14,7 +15,7 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-  final GetStorageServices _GetStorageServices = Get.put(GetStorageServices());
+  final GetStorageServices getStorageServices = Get.put(GetStorageServices());
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +125,8 @@ class _SideMenuState extends State<SideMenu> {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      _GetStorageServices.write("isLoggedIn", false);
-                      Get.to(() => LoginScreen());
+                      getStorageServices.write("isLoggedIn", false);
+                      Get.to(() => const LoginScreen());
                     },
                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
                     child: Row(

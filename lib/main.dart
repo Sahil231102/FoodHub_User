@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/firebase_options.dart';
-import 'package:food_hub_user/view/widget/bottom_navigation_bar_screen.dart';
+import 'package:food_hub_user/view/auth/splash_screen.dart';
 import 'package:get/get.dart';
 
 import 'services/get_storage_services.dart';
@@ -12,7 +12,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
@@ -29,6 +28,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const BottomNavigationBarScreen());
+        home: const SplashScreen());
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/get_storege_controller.dart';
+import 'package:food_hub_user/core/const/colors.dart';
+import 'package:food_hub_user/core/const/images.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {

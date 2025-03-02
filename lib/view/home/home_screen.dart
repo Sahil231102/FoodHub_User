@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/images.dart';
-import 'package:food_hub_user/const/text_style.dart';
+import 'package:food_hub_user/controller/get_user_info_controller.dart';
+import 'package:food_hub_user/core/const/images.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:food_hub_user/view/home/food_screen.dart';
-import 'package:food_hub_user/view/widget/common_app_bar.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../core/const/colors.dart';
+import '../../core/const/text_style.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,9 +18,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GetUserInfoController _getUserController = Get.put(GetUserInfoController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final PageController _pageController = PageController();
+    final PageController pageController = PageController();
 
     final List<String> foodImages = [
       AppImages.page_1,
@@ -27,23 +37,27 @@ class _HomeScreenState extends State<HomeScreen> {
       AppImages.page_4,
     ];
 
-    final List<String> categories_Images = [
+    final List<String> categoriesImages = [
       AppImages.Gujarati_thali,
       AppImages.paneer_Sabji,
       AppImages.Panjabi_thali,
       AppImages.Cold_drink,
     ];
-    final List<String> categories_Name = [
+    final List<String> categoriesName = [
       "Gujarati",
       "Burgers",
       "Panjabi Thali",
       "Cold Drink",
     ];
-
+    var userData = _getUserController.userData;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CommonAppBar(
-        text: "Welcome Sahil Sorathiya!",
+      appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        title: Obx(() => Text(
+              "Welcome ${userData["name"] ?? "Loading...."}!",
+              style: AppTextStyle.w600(color: AppColors.white, fontSize: 19),
+            )),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -51,11 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             20.sizeHeight,
-            // Wrap the PageView with a fixed height Container
             SizedBox(
-              height: 200, // Set an appropriate height
+              height: 200,
               child: PageView.builder(
-                controller: _pageController,
+                controller: pageController,
                 itemCount: foodImages.length,
                 itemBuilder: (context, index) {
                   return Padding(
@@ -77,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 16),
             Center(
               child: SmoothPageIndicator(
-                controller: _pageController,
+                controller: pageController,
                 count: foodImages.length,
                 effect: const WormEffect(
                   dotColor: Colors.grey,
@@ -91,39 +104,29 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "All Categories",
                     style: AppTextStyle.w700(fontSize: 20),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "See All >",
-                      style: AppTextStyle.w700(
-                        fontSize: 17,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
-
+            10.sizeHeight,
             SizedBox(
               width: double.infinity,
               height: 130,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: categories_Images.length,
+                itemCount: categoriesImages.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: GestureDetector(
                         onTap: () {
                           NavigationServices.to(
                             () => FoodScreen(
-                              foodCategory: categories_Name[index],
+                              foodCategory: categoriesName[index],
                             ),
                           );
                         },
@@ -146,14 +149,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                         image: AssetImage(
-                                          categories_Images[index],
+                                          categoriesImages[index],
                                         ),
                                         fit: BoxFit.cover),
                                   ),
                                 ),
                                 10.sizeHeight,
                                 Text(
-                                  categories_Name[index],
+                                  categoriesName[index],
                                   style: AppTextStyle.w700(color: AppColors.white, fontSize: 15),
                                 ),
                               ],
@@ -164,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            10.sizeHeight,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
@@ -173,19 +177,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     "Today Special",
                     style: AppTextStyle.w700(fontSize: 20),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "See All >",
-                      style: AppTextStyle.w700(
-                        fontSize: 17,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
-
+            10.sizeHeight,
             SizedBox(
               height: 210,
               child: ListView.builder(
@@ -256,20 +251,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           bottom: 15,
                           right: 12,
                           child: Container(
-                              height: 35,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(
-                                  20,
-                                ),
+                            height: 35,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(
+                                20,
                               ),
-                              child: TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    "View",
-                                    style: AppTextStyle.w700(fontSize: 16),
-                                  ))),
+                            ),
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                "View",
+                                style: AppTextStyle.w700(fontSize: 16),
+                              ),
+                            ),
+                          ),
                         )
                       ],
                     ),

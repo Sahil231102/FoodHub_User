@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
+
+import '../const/colors.dart';
 
 class AuthCommanTitleText extends StatelessWidget {
   final String text;

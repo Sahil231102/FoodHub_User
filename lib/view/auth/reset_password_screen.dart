@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/images.dart';
 import 'package:food_hub_user/controller/send_reset_password_email.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/validator.dart';
-import 'package:food_hub_user/view/widget/auth_comman_button.dart';
-import 'package:food_hub_user/view/widget/common_text_field.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
+
+import '../../core/component/auth_comman_button.dart';
+import '../../core/component/common_text_field.dart';
+import '../../core/const/images.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -30,18 +31,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               children: [
                 const Positioned(
                   child: Image(
-                    image: AssetImage(AppImages.Circle1),
+                    image: AssetImage(AppImages.circle1),
                   ),
                 ),
                 const Positioned(
                   child: Image(
-                    image: AssetImage(AppImages.Circle2),
+                    image: AssetImage(AppImages.circle2),
                   ),
                 ),
                 const Positioned(
                   right: 0,
                   child: Image(
-                    image: AssetImage(AppImages.Circle3),
+                    image: AssetImage(AppImages.circle3),
                   ),
                 ),
                 Padding(

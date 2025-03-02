@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/view/home/account_screen.dart';
+import 'package:food_hub_user/core/const/colors.dart';
 import 'package:food_hub_user/view/home/cart_screen.dart';
 import 'package:food_hub_user/view/home/food_screen.dart';
 import 'package:food_hub_user/view/home/home_screen.dart';
 import 'package:food_hub_user/view/home/order_screen.dart';
+import 'package:food_hub_user/view/home/profile_screen.dart';
 
 class BottomNavigationBarScreen extends StatefulWidget {
   const BottomNavigationBarScreen({super.key});
@@ -19,9 +19,9 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
   final List<Widget> _screen = [
     const HomeScreen(),
     const FoodScreen(),
-    CartScreen(),
+    const CartScreen(),
     const OrderScreen(),
-    const AccountScreen(),
+    const ProfileScreen(),
   ];
 
   @override

@@ -1,14 +1,15 @@
-import 'package:csc_picker/csc_picker.dart';
+import 'package:csc_picker_plus/csc_picker_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/images.dart';
-import 'package:food_hub_user/const/text_style.dart';
 import 'package:food_hub_user/controller/user_info_controller.dart';
-import 'package:food_hub_user/view/widget/auth_comman_button.dart';
-import 'package:food_hub_user/view/widget/auth_comman_title_text.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
+import 'package:food_hub_user/core/const/colors.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+
+import '../../core/component/auth_comman_button.dart';
+import '../../core/component/auth_comman_title_text.dart';
+import '../../core/const/images.dart';
+import '../../core/const/text_style.dart';
 
 class UserInfoScreen extends StatefulWidget {
   final String? uid;
@@ -23,7 +24,7 @@ class UserInfoScreen extends StatefulWidget {
 }
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
-  final UserInfoController _userInfoController = Get.put(UserInfoController());
+  final UserInfoController userInfoController = Get.put(UserInfoController());
   final TextEditingController mobile = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -35,13 +36,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: GetBuilder<UserInfoController>(
-        builder: (Controller) {
+        builder: (controller) {
           return SafeArea(
             child: Stack(
               children: [
-                const Positioned(child: Image(image: AssetImage(AppImages.Circle1))),
-                const Positioned(child: Image(image: AssetImage(AppImages.Circle2))),
-                const Positioned(right: 0, child: Image(image: AssetImage(AppImages.Circle3))),
+                const Positioned(child: Image(image: AssetImage(AppImages.circle1))),
+                const Positioned(child: Image(image: AssetImage(AppImages.circle2))),
+                const Positioned(right: 0, child: Image(image: AssetImage(AppImages.circle3))),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -54,7 +55,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           children: [
                             const SizedBox(height: 20),
                             20.sizeHeight,
-                            AuthCommanTitleText(
+                            const AuthCommanTitleText(
                               text: "Sign Up Information",
                               fontSize: 30,
                             ),
@@ -90,19 +91,19 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                 counterText: "",
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: AppColors.borderColor),
+                                  borderSide: const BorderSide(color: AppColors.borderColor),
                                 ),
                                 focusedErrorBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: AppColors.errorColor),
+                                  borderSide: const BorderSide(color: AppColors.errorColor),
                                 ),
                                 errorBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: AppColors.errorColor),
+                                  borderSide: const BorderSide(color: AppColors.errorColor),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                     color: AppColors.primary,
                                   ),
                                 ),
@@ -113,7 +114,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                 style: AppTextStyle.w300(
                                     fontSize: 16, color: AppColors.labelTextColor)),
                             12.sizeHeight,
-                            CSCPicker(
+                            CSCPickerPlus(
                               dropdownItemStyle: AppTextStyle.w600(
                                 fontSize: 17,
                                 color: const Color(
@@ -122,7 +123,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               ),
                               cityDropdownLabel: "Select City",
                               stateDropdownLabel: "Select State",
-                              disabledDropdownDecoration: BoxDecoration(color: Colors.white),
+                              disabledDropdownDecoration: const BoxDecoration(color: Colors.white),
                               layout: Layout.horizontal,
                               searchBarRadius: 10,
                               countryDropdownLabel: "Select Country",
@@ -132,14 +133,14 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                 String countryName = countryDetails.last
                                     .replaceAll(RegExp(r'[()]'), ''); // Extract country code
                                 String countryCode = countryDetails.first;
-                                Controller.countryCode = countryCode.toLowerCase();
-                                Controller.countryName = countryName.toString();
+                                controller.countryCode = countryCode.toLowerCase();
+                                controller.countryName = countryName.toString();
                               },
                               onStateChanged: (value) {
-                                Controller.state = value ?? "";
+                                controller.state = value ?? "";
                               },
                               onCityChanged: (value) {
-                                Controller.city = value ?? "";
+                                controller.city = value ?? "";
                               },
                             ),
                             31.sizeHeight,
@@ -152,20 +153,20 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                 Expanded(
                                   child: RadioListTile<String>(
                                     value: "Male",
-                                    groupValue: Controller.selectedGender,
-                                    title: Text("Male"),
+                                    groupValue: controller.selectedGender,
+                                    title: const Text("Male"),
                                     onChanged: (value) {
-                                      Controller.updateGender(value!);
+                                      controller.updateGender(value!);
                                     },
                                   ),
                                 ),
                                 Expanded(
                                   child: RadioListTile<String>(
                                     value: "Female",
-                                    groupValue: Controller.selectedGender,
-                                    title: Text("Female"),
+                                    groupValue: controller.selectedGender,
+                                    title: const Text("Female"),
                                     onChanged: (value) {
-                                      Controller.updateGender(value!);
+                                      controller.updateGender(value!);
                                     },
                                   ),
                                 ),
@@ -188,7 +189,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                   return;
                                 }
 
-                                if (Controller.countryName.isEmpty) {
+                                if (controller.countryName.isEmpty) {
                                   Get.snackbar(
                                     "Error",
                                     "Country is required. Please select your country.",
@@ -199,7 +200,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                   return;
                                 }
 
-                                if (Controller.state.isEmpty) {
+                                if (controller.state.isEmpty) {
                                   Get.snackbar(
                                     "Error",
                                     "State is required. Please select your state.",
@@ -210,7 +211,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                   return;
                                 }
 
-                                if (Controller.city.isEmpty) {
+                                if (controller.city.isEmpty) {
                                   Get.snackbar(
                                     "Error",
                                     "City is required. Please select your city.",
@@ -221,7 +222,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                   return;
                                 }
 
-                                if (Controller.selectedGender.isEmpty) {
+                                if (controller.selectedGender.isEmpty) {
                                   Get.snackbar(
                                     "Error",
                                     "Gender is required. Please select your gender.",
@@ -233,17 +234,17 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                 }
 
                                 // If all validations pass, proceed with saving the information
-                                await Controller.userInformationData(
+                                await controller.userInformationData(
                                   uid: widget.uid,
-                                  city: Controller.city,
-                                  countryName: Controller.countryName,
-                                  countryCode: Controller.countryCode,
-                                  state: Controller.state,
-                                  gender: Controller.selectedGender,
-                                  mobileNumber: "$dbCountryCode" + mobile.text,
+                                  city: controller.city,
+                                  countryName: controller.countryName,
+                                  countryCode: controller.countryCode,
+                                  state: controller.state,
+                                  gender: controller.selectedGender,
+                                  mobileNumber: dbCountryCode + mobile.text,
                                 );
                               },
-                              isLoading: Controller.isUpdate,
+                              isLoading: controller.isUpdate,
                               text: "SAVE",
                             ),
                             32.sizeHeight,

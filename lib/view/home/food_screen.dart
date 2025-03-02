@@ -3,14 +3,15 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/text_style.dart';
+import 'package:food_hub_user/core/const/text_style.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/firebase_services.dart';
 import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:food_hub_user/view/home/food_details_screen.dart';
-import 'package:food_hub_user/view/widget/common_app_bar.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
+
+import '../../core/component/common_app_bar.dart';
+import '../../core/const/colors.dart';
 
 class FoodScreen extends StatefulWidget {
   final String? foodCategory;
@@ -27,8 +28,9 @@ class _FoodScreenState extends State<FoodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(
-        text: widget.foodCategory ?? "Food",
+      backgroundColor: AppColors.white,
+      appBar: const CommonAppBar(
+        text: "Food",
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -48,13 +50,23 @@ class _FoodScreenState extends State<FoodScreen> {
                       },
                       decoration: InputDecoration(
                         hintText: 'Search for food...',
-                        hintStyle: AppTextStyle.w400(fontSize: 15, color: AppColors.white),
-                        prefixIcon: const Icon(Icons.search, color: AppColors.white),
+                        hintStyle: AppTextStyle.w400(fontSize: 15, color: AppColors.black),
+                        prefixIcon: const Icon(Icons.search, color: AppColors.black),
                         filled: true,
-                        fillColor: Colors.black54,
-                        border: OutlineInputBorder(
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
+                          borderSide: const BorderSide(
+                            color: Colors.black, // Border color when not focused
+                            width: 2, // Border width
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.black, // Border color when focused
+                            width: 2.5, // Slightly thicker border
+                          ),
                         ),
                       ),
                     ),
@@ -63,7 +75,11 @@ class _FoodScreenState extends State<FoodScreen> {
                     stream: FirebaseServices.foodFirestore.snapshots(),
                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 5, // Makes it more visible
+                          ),
+                        );
                       }
 
                       if (snapshot.hasError) {
@@ -85,23 +101,15 @@ class _FoodScreenState extends State<FoodScreen> {
 
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                         return Center(
-                          child: Column(
-                            children: [
-                              const Image(
-                                image: AssetImage(""),
-                                height: 420,
-                                width: 400,
-                              ),
-                              Text("No Food Items. Add Food Item.",
-                                  style: AppTextStyle.w700(fontSize: 20)),
-                            ],
+                          child: Text(
+                            "No Food Items Found",
+                            style: AppTextStyle.w600(fontSize: 18),
                           ),
-                        );
+                        ).paddingSymmetric(vertical: 20);
                       }
 
                       final List<DocumentSnapshot> foodItems = snapshot.data!.docs;
 
-                      // Filtering logic based on category and search query
                       final List<DocumentSnapshot> filteredFoodItems = foodItems.where((food) {
                         String category = food['food_category']?.toString().toLowerCase() ?? '';
                         String name = food['food_name']?.toString().toLowerCase() ?? '';
@@ -117,18 +125,14 @@ class _FoodScreenState extends State<FoodScreen> {
                           ? Center(
                               child: Column(
                                 children: [
-                                  const Image(
-                                    image:
-                                        AssetImage("assets/no_data.png"), // Update with your asset
-                                    height: 420,
-                                    width: 400,
+                                  Center(
+                                    child: Text("No Food Items Found",
+                                        style: AppTextStyle.w700(fontSize: 20)),
                                   ),
-                                  Text("No Food Items Found",
-                                      style: AppTextStyle.w700(fontSize: 20)),
                                 ],
                               ),
                             )
-                          : ListView.builder(
+                          : ListView.separated(
                               itemCount: filteredFoodItems.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -150,7 +154,7 @@ class _FoodScreenState extends State<FoodScreen> {
 
                                 return GestureDetector(
                                   onTap: () => NavigationServices.to(
-                                    () => FoodDetailsScreen(document_id: food['food_id']),
+                                    () => FoodDetailsScreen(documentId: food['food_id']),
                                   ),
                                   child: Card(
                                     color: Colors.black87,
@@ -162,8 +166,8 @@ class _FoodScreenState extends State<FoodScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Container(
-                                            height: 100,
-                                            width: 100,
+                                            height: 80,
+                                            width: 80,
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),
                                               border: Border.all(
@@ -186,7 +190,7 @@ class _FoodScreenState extends State<FoodScreen> {
                                                 Text(
                                                   foodName,
                                                   style: AppTextStyle.w700(
-                                                    fontSize: 18,
+                                                    fontSize: 15,
                                                     color: AppColors.white,
                                                   ),
                                                   overflow: TextOverflow.ellipsis,
@@ -195,7 +199,7 @@ class _FoodScreenState extends State<FoodScreen> {
                                                 Text(
                                                   "Price: $foodPrice",
                                                   style: AppTextStyle.w700(
-                                                    fontSize: 18,
+                                                    fontSize: 15,
                                                     color: AppColors.white,
                                                   ),
                                                 ),
@@ -203,7 +207,7 @@ class _FoodScreenState extends State<FoodScreen> {
                                                 Text(
                                                   foodCategory,
                                                   style: AppTextStyle.w700(
-                                                    fontSize: 18,
+                                                    fontSize: 15,
                                                     color: AppColors.white,
                                                   ),
                                                 ),
@@ -216,6 +220,9 @@ class _FoodScreenState extends State<FoodScreen> {
                                   ),
                                 );
                               },
+                              separatorBuilder: (context, index) => const Divider(
+                                thickness: 3,
+                              ),
                             );
                     },
                   )

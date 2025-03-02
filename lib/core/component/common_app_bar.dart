@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/text_style.dart';
 
-// Modify the CommonAppBar class to implement PreferredSizeWidget
+import '../const/colors.dart';
+import '../const/text_style.dart';
+
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? text;
+  final Widget? leading;
 
-  const CommonAppBar({super.key, this.text});
+  const CommonAppBar({super.key, this.text, this.leading});
 
   // Define the preferred size (height) for the app bar
   @override
@@ -16,6 +17,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.primary,
+      leading: leading,
       title: Text(
         text ?? "",
         style: AppTextStyle.w700(fontSize: 20, color: AppColors.white),

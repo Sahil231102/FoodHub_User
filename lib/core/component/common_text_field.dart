@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/text_style.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
+
+import '../const/colors.dart';
+import '../const/text_style.dart';
 
 class CommonTextField extends StatelessWidget {
   final bool? readOnly;
@@ -51,7 +52,7 @@ class CommonTextField extends StatelessWidget {
             ),
           ),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             hintText: hintText,
             hintStyle: AppTextStyle.w400(color: AppColors.hintTextColor, fontSize: 17),
             suffixIcon: suffixIcon,

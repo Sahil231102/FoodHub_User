@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/core/const/colors.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
 import 'package:food_hub_user/view/auth/signup_screen.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Container(
             height: 800,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
                   "assets/images/welcome.jpg",
@@ -31,8 +31,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ),
           Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
                 colors: [Colors.black, Colors.transparent],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
@@ -45,7 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: [
                 160.sizeHeight,
                 RichText(
-                  text: TextSpan(children: [
+                  text: const TextSpan(children: [
                     TextSpan(
                       text: "Welcome to \n",
                       style: TextStyle(
@@ -65,7 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ]),
                 ),
                 20.sizeHeight,
-                Text(
+                const Text(
                   "Your favourite foods delivered\nfast at your door.",
                   style: TextStyle(
                       color: AppColors.welcomeTextColor, fontSize: 18, fontWeight: FontWeight.w500),
@@ -80,12 +80,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Center(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      side: BorderSide(color: Colors.white, strokeAlign: 2),
-                      fixedSize: Size(315, 54),
+                      side: const BorderSide(color: Colors.white, strokeAlign: 2),
+                      fixedSize: const Size(315, 54),
                       backgroundColor: Colors.white30,
                     ),
                     onPressed: () {
-                      Get.to(SignupScreen());
+                      Get.to(const SignupScreen());
                     },
                     child: const Text(
                       "Start with email",

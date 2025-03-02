@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/const/text_style.dart';
+
+import '../const/colors.dart';
+import '../const/text_style.dart';
 
 class AuthCommanButton extends StatelessWidget {
   final void Function()? onTap;
@@ -22,10 +23,10 @@ class AuthCommanButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(29),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xFF7A81BE).withOpacity(0.5),
+                    color: const Color(0xFF7A81BE).withOpacity(0.5),
                     blurRadius: 15,
                     spreadRadius: 1,
-                    offset: Offset(0, 2))
+                    offset: const Offset(0, 2))
               ]),
           child: Center(
             child: isLoading
@@ -34,7 +35,7 @@ class AuthCommanButton extends StatelessWidget {
                     color: Colors.black,
                   )
                 : Text(
-                    text ?? "",
+                    text,
                     style: AppTextStyle.w700(
                       color: AppColors.buttonTextColor,
                       fontSize: 15,

@@ -1,35 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
-import 'package:food_hub_user/services/navigation_services.dart';
-import 'package:food_hub_user/view/home/online_payment_screen.dart';
-import 'package:food_hub_user/view/widget/auth_comman_button.dart';
-import 'package:food_hub_user/view/widget/common_app_bar.dart';
-import 'package:food_hub_user/view/widget/common_text_field.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
+import 'package:food_hub_user/controller/online_payment_controller.dart';
+import 'package:food_hub_user/core/const/colors.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
+import 'package:get/get.dart';
+
+import '../../core/component/common_app_bar.dart';
+import '../../core/component/common_button.dart';
+import '../../core/component/common_text_field.dart';
 
 class AddressScreen extends StatefulWidget {
-  const AddressScreen({super.key});
+  final String payment;
+
+  const AddressScreen({super.key, required this.payment});
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
 }
 
 class _AddressScreenState extends State<AddressScreen> {
+  final OnlinePaymentController onlinePaymentController = Get.put(OnlinePaymentController());
   final TextEditingController flatNumberController = TextEditingController();
   final TextEditingController homeAddressController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController pinCodeController = TextEditingController();
-  String? cardNumberController = "";
-  String? expiryDateController = "";
-  String? expiryYearController = "";
-  String? cardType = "";
-  String? cardHolderNameController = "";
-  String? cvvController = "";
-
+  final _formKey = GlobalKey<FormState>();
   String? _selectPaymentMethod = "";
 
-  final _formKey = GlobalKey<FormState>(); // Form key for validation
+  void _submitOrder() {
+    if (_formKey.currentState?.validate() ?? false) {
+      onlinePaymentController.setUserAddress(
+        flatNumber: flatNumberController.text,
+        homeAddress: homeAddressController.text,
+        landmark: landmarkController.text,
+        city: cityController.text,
+        pinCode: pinCodeController.text,
+      );
+
+      if (_selectPaymentMethod == "ONLINE") {
+        onlinePaymentController.openCheckout(
+          payment: widget.payment.toString(),
+          mobileNumber: "9909498426",
+        );
+      } else if (_selectPaymentMethod == "CASH") {
+        onlinePaymentController.placeCashOrder(widget.payment.toString());
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please complete the form.")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,54 +63,33 @@ class _AddressScreenState extends State<AddressScreen> {
         padding: const EdgeInsets.only(right: 20, top: 20, left: 20),
         child: SingleChildScrollView(
           child: Form(
-            // Wrapping the form inside a Form widget
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CommonTextField(
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return "Please Enter Flat Number";
-                    }
-                    return null;
-                  },
+                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter Flat Number" : null,
                   labelText: "Flat No",
                   hintText: "Flat Number",
                   controller: flatNumberController,
                 ),
                 10.sizeHeight,
                 CommonTextField(
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return "Please Enter Address";
-                    }
-                    return null;
-                  },
+                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter Address" : null,
                   labelText: "Address",
                   hintText: "Address",
                   controller: homeAddressController,
                 ),
                 10.sizeHeight,
                 CommonTextField(
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return "Please Enter Landmark";
-                    }
-                    return null;
-                  },
+                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter Landmark" : null,
                   labelText: "Near By",
                   hintText: "Landmark",
                   controller: landmarkController,
                 ),
                 10.sizeHeight,
                 CommonTextField(
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return "Please Enter City";
-                    }
-                    return null;
-                  },
+                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter City" : null,
                   labelText: "City",
                   hintText: "City",
                   controller: cityController,
@@ -97,11 +97,8 @@ class _AddressScreenState extends State<AddressScreen> {
                 10.sizeHeight,
                 CommonTextField(
                   validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return "Please Enter Pincode";
-                    } else if (p0.length != 6) {
-                      return "Enter a 6 Digit Pincode";
-                    }
+                    if (p0 == null || p0.isEmpty) return "Please Enter Pincode";
+                    if (p0.length != 6) return "Enter a 6 Digit Pincode";
                     return null;
                   },
                   keyboardType: TextInputType.number,
@@ -139,44 +136,14 @@ class _AddressScreenState extends State<AddressScreen> {
                     ),
                   ],
                 ),
-                if (_selectPaymentMethod == "ONLINE") ...[
-                  20.sizeHeight,
-                  AuthCommanButton(
-                    text: "Pay With ONLINE",
-                    onTap: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        NavigationServices.to(() => const OnlinePaymentScreen());
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Processing Card Payment...")),
-                        );
-                      } else {
-                        // Show error message if validation fails
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Please complete the form.")),
-                        );
-                      }
-                    },
+                20.sizeHeight,
+                Center(
+                  child: CommonButton(
+                    text: _selectPaymentMethod == "ONLINE" ? "Pay With ONLINE" : "Submit Order",
+                    onPressed: _submitOrder,
                   ),
-                  20.sizeHeight,
-                ] else if (_selectPaymentMethod == "CASH") ...[
-                  20.sizeHeight,
-                  AuthCommanButton(
-                    text: "Submit",
-                    onTap: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Processing Cash Payment...")),
-                        );
-                      } else {
-                        // Show error message if validation fails
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Please complete the form.")),
-                        );
-                      }
-                    },
-                  ),
-                  20.sizeHeight,
-                ]
+                ),
+                20.sizeHeight,
               ],
             ),
           ),

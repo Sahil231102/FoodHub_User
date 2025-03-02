@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_hub_user/core/utils/app_snackbar.dart';
 import 'package:food_hub_user/services/firebase_services.dart';
 import 'package:food_hub_user/view/auth/user_info_screen.dart';
-import 'package:food_hub_user/view/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 
 class SignupController extends GetxController {
@@ -21,6 +21,12 @@ class SignupController extends GetxController {
       try {
         ioLoading = true;
         update();
+        String toTitleCase(String text) {
+          return text.toLowerCase().split(' ').map((word) {
+            if (word.isEmpty) return word;
+            return word[0].toUpperCase() + word.substring(1);
+          }).join(' ');
+        }
 
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
@@ -31,7 +37,7 @@ class SignupController extends GetxController {
           "uid": userid,
           "password": password,
           "email": email,
-          "name": name,
+          "name": toTitleCase(name),
           "last_login_time": DateTime.now(),
         });
 

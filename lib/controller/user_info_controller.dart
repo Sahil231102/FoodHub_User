@@ -1,6 +1,6 @@
+import 'package:food_hub_user/core/utils/app_snackbar.dart';
 import 'package:food_hub_user/services/firebase_services.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
-import 'package:food_hub_user/view/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

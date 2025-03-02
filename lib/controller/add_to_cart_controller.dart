@@ -19,18 +19,36 @@ class AddToCartController extends GetxController {
       String userId = getCurrentUserId();
       if (userId.isEmpty) throw Exception('User not logged in');
 
+      // Fetch cart items
       QuerySnapshot cartSnapshot =
           await FirebaseFirestore.instance.collection('user').doc(userId).collection('cart').get();
 
-      cartItems = cartSnapshot.docs.map((doc) {
+      List<String> foodIds = cartSnapshot.docs.map((doc) => doc.id).toList();
+      List<int> quantities =
+          cartSnapshot.docs.map((doc) => (doc['quantity'] as num).toInt()).toList();
+
+      if (foodIds.isEmpty) {
+        cartItems = [];
+        isLoading = false;
+        update();
+        return;
+      }
+
+      List<DocumentSnapshot> foodDocs = await Future.wait(
+        foodIds.map((id) => FirebaseFirestore.instance.collection('foodItems').doc(id).get()),
+      );
+
+      cartItems = List.generate(foodDocs.length, (index) {
+        var foodData = foodDocs[index].data() as Map<String, dynamic>?;
+
         return {
-          'productId': doc.id,
-          'productName': doc['productName'],
-          'price': doc['price'],
-          'quantity': doc['quantity'],
-          'image': doc['image'] ?? "",
+          'foodId': foodIds[index],
+          'quantity': quantities[index],
+          'name': foodData?['food_name'] ?? 'Unknown',
+          'price': foodData?['food_price'] ?? '0',
+          'image': (foodData?['images'] as List<dynamic>?)?.first ?? '',
         };
-      }).toList();
+      });
 
       isLoading = false;
       update();
@@ -42,11 +60,7 @@ class AddToCartController extends GetxController {
   }
 
   Future<void> addToCart({
-    required String productId,
-    required String productName,
-    required String price,
-    required String category,
-    required String image,
+    required String foodId,
     required double quantity,
   }) async {
     try {
@@ -60,19 +74,19 @@ class AddToCartController extends GetxController {
           .collection('user')
           .doc(userId)
           .collection('cart')
-          .doc(productId)
+          .doc(foodId)
           .get();
 
       if (cartDoc.exists) {
-        // If item already exists, update the quantity
         int currentQuantity = cartDoc['quantity'];
         await FirebaseFirestore.instance
             .collection('user')
             .doc(userId)
             .collection('cart')
-            .doc(productId)
+            .doc(foodId)
             .update({
-          'quantity': currentQuantity + quantity, // Increment quantity
+          'foodId': foodId,
+          'quantity': currentQuantity + quantity,
         });
       } else {
         // If item doesn't exist, add it
@@ -80,13 +94,10 @@ class AddToCartController extends GetxController {
             .collection('user')
             .doc(userId)
             .collection('cart')
-            .doc(productId)
+            .doc(foodId)
             .set({
-          'productName': productName,
-          'price': price,
-          'category': category,
+          'foodId': foodId,
           'quantity': quantity,
-          'image': image, // Save Base64 string
         });
       }
       fetchCartItems(); // Refresh cart data after adding

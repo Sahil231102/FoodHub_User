@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/const/colors.dart';
+import 'package:food_hub_user/core/const/text_style.dart';
+import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/get_storage_services.dart';
 import 'package:food_hub_user/view/auth/login_screen.dart';
 import 'package:food_hub_user/view/home/profile_screen.dart';
-import 'package:food_hub_user/view/widget/sized_box.dart';
 import 'package:get/get.dart';
 
-import '../../const/text_style.dart';
-import '../widget/common_app_bar.dart';
+import '../../core/component/common_app_bar.dart';
+import '../../core/const/colors.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -17,12 +17,12 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final GetStorageServices _GetStorageServices = Get.put(GetStorageServices());
+  final _getStorageServices = Get.put(GetStorageServices());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CommonAppBar(
+        appBar: const CommonAppBar(
           text: "Account",
         ),
         body: Column(
@@ -62,7 +62,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 style: AppTextStyle.w700(fontSize: 16),
               ),
               onTap: () {
-                Get.to(() => ProfileScreen());
+                Get.to(() => const ProfileScreen());
               },
             ),
             ListTile(
@@ -112,8 +112,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      _GetStorageServices.write("isLoggedIn", false);
-                      Get.to(() => LoginScreen());
+                      _getStorageServices.write("isLoggedIn", false);
+                      Get.to(() => const LoginScreen());
                     },
                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
                     child: Row(
