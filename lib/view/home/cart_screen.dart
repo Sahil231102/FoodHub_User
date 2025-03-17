@@ -50,8 +50,10 @@ class _CartScreenState extends State<CartScreen> {
           ));
         }
 
-        int totalItems = controller.cartItems
-            .fold(0, (sum, item) => sum + (int.tryParse(item['quantity'].toString()) ?? 1));
+        int totalItems = controller.cartItems.fold(
+            0,
+            (sum, item) =>
+                sum + (int.tryParse(item['quantity'].toString()) ?? 1));
 
         return Column(
           children: [
@@ -61,19 +63,12 @@ class _CartScreenState extends State<CartScreen> {
                 itemBuilder: (context, index) {
                   final item = controller.cartItems[index];
 
-                  Uint8List? imageBytes;
-                  if (item['image'] != null && item['image'].isNotEmpty) {
-                    try {
-                      imageBytes = base64Decode(item['image']);
-                    } catch (e) {
-                      imageBytes = null;
-                    }
-                  }
-
                   return Card(
                     color: AppColors.black,
-                    margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
                     elevation: 2,
                     child: Padding(
                       padding: const EdgeInsets.all(15),
@@ -84,10 +79,11 @@ class _CartScreenState extends State<CartScreen> {
                             height: 80,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(width: 3, color: AppColors.white),
+                              border:
+                                  Border.all(width: 3, color: AppColors.white),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: MemoryImage(imageBytes!),
+                                image: NetworkImage(item["image"]),
                               ),
                             ),
                           ),
@@ -99,19 +95,24 @@ class _CartScreenState extends State<CartScreen> {
                               children: [
                                 10.sizeHeight,
                                 Text(item['name'],
-                                    style: AppTextStyle.w700(fontSize: 15, color: AppColors.white)),
+                                    style: AppTextStyle.w700(
+                                        fontSize: 15, color: AppColors.white)),
                                 5.sizeHeight,
-                                Text("₹${double.tryParse(item['price'].toString())?.toInt() ?? 0}",
-                                    style: AppTextStyle.w600(fontSize: 15, color: AppColors.white)),
+                                Text(
+                                    "₹${double.tryParse(item['price'].toString())?.toInt() ?? 0}",
+                                    style: AppTextStyle.w600(
+                                        fontSize: 15, color: AppColors.white)),
                                 Row(
                                   children: [
                                     IconButton(
                                       onPressed: () {
-                                        int currentQuantity =
-                                            int.tryParse(item['quantity'].toString()) ?? 1;
+                                        int currentQuantity = int.tryParse(
+                                                item['quantity'].toString()) ??
+                                            1;
                                         if (currentQuantity > 1) {
                                           controller.updateQuantity(
-                                              item['foodId'], currentQuantity - 1);
+                                              item['foodId'],
+                                              currentQuantity - 1);
                                         }
                                       },
                                       icon: Icon(
@@ -120,15 +121,19 @@ class _CartScreenState extends State<CartScreen> {
                                         size: 25,
                                       ),
                                     ),
-                                    Text("${int.tryParse(item['quantity'].toString()) ?? 1}",
+                                    Text(
+                                        "${int.tryParse(item['quantity'].toString()) ?? 1}",
                                         style: AppTextStyle.w700(
-                                            fontSize: 18, color: AppColors.white)),
+                                            fontSize: 18,
+                                            color: AppColors.white)),
                                     IconButton(
                                       onPressed: () {
-                                        int currentQuantity =
-                                            int.tryParse(item['quantity'].toString()) ?? 1;
+                                        int currentQuantity = int.tryParse(
+                                                item['quantity'].toString()) ??
+                                            1;
                                         controller.updateQuantity(
-                                            item['foodId'], currentQuantity + 1);
+                                            item['foodId'],
+                                            currentQuantity + 1);
                                       },
                                       icon: Icon(
                                         Icons.add_circle,
@@ -145,7 +150,8 @@ class _CartScreenState extends State<CartScreen> {
                             onPressed: () {
                               controller.removeFromCart(item['foodId']);
                             },
-                            icon: Icon(Icons.cancel, color: Colors.grey.shade700),
+                            icon:
+                                Icon(Icons.cancel, color: Colors.grey.shade700),
                           ),
                         ],
                       ),
@@ -166,9 +172,11 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Total Items",
-                          style: AppTextStyle.w600(fontSize: 16, color: AppColors.black)),
+                          style: AppTextStyle.w600(
+                              fontSize: 16, color: AppColors.black)),
                       Text("$totalItems",
-                          style: AppTextStyle.w600(fontSize: 18, color: AppColors.black))
+                          style: AppTextStyle.w600(
+                              fontSize: 18, color: AppColors.black))
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -176,9 +184,11 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Subtotal",
-                          style: AppTextStyle.w700(fontSize: 16, color: AppColors.black)),
+                          style: AppTextStyle.w700(
+                              fontSize: 16, color: AppColors.black)),
                       Text("₹${controller.getTotalPrice()}",
-                          style: AppTextStyle.w700(fontSize: 16, color: AppColors.black)),
+                          style: AppTextStyle.w700(
+                              fontSize: 16, color: AppColors.black)),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -187,9 +197,12 @@ class _CartScreenState extends State<CartScreen> {
                     children: [
                       Text(
                         "Delivery Charge",
-                        style: AppTextStyle.w500(fontSize: 16, color: AppColors.black),
+                        style: AppTextStyle.w500(
+                            fontSize: 16, color: AppColors.black),
                       ),
-                      Text("₹50", style: AppTextStyle.w500(fontSize: 16, color: AppColors.black))
+                      Text("₹50",
+                          style: AppTextStyle.w500(
+                              fontSize: 16, color: AppColors.black))
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -197,9 +210,11 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Total Price",
-                          style: AppTextStyle.w700(fontSize: 18, color: AppColors.black)),
+                          style: AppTextStyle.w700(
+                              fontSize: 18, color: AppColors.black)),
                       Text("₹${controller.getTotalPrice() + 50}",
-                          style: AppTextStyle.w700(fontSize: 18, color: AppColors.black)),
+                          style: AppTextStyle.w700(
+                              fontSize: 18, color: AppColors.black)),
                     ],
                   ),
                   20.sizeHeight,

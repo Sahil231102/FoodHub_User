@@ -30,7 +30,8 @@ class OrderDetailsScreen extends StatefulWidget {
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final OrderController orderController = Get.put(OrderController());
-  final OnlinePaymentController onlinePaymentController = Get.put(OnlinePaymentController());
+  final OnlinePaymentController onlinePaymentController =
+      Get.put(OnlinePaymentController());
   bool isGeneratingPdf = false;
 
   @override
@@ -48,8 +49,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       final pdf = pw.Document();
 
       // Load fonts
-      final fontData = await rootBundle.load("assets/font/sofia-pro/Sofia Pro Regular Az.otf");
-      final fontDataBold = await rootBundle.load("assets/font/sofia-pro/Sofia Pro Bold Az.otf");
+      final fontData = await rootBundle
+          .load("assets/font/sofia-pro/Sofia Pro Regular Az.otf");
+      final fontDataBold =
+          await rootBundle.load("assets/font/sofia-pro/Sofia Pro Bold Az.otf");
       final ttf = pw.Font.ttf(fontData);
       final ttfBold = pw.Font.ttf(fontDataBold);
 
@@ -108,7 +111,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('Order ID:', style: pw.TextStyle(font: ttfBold)),
+                        pw.Text('Order ID:',
+                            style: pw.TextStyle(font: ttfBold)),
                         pw.Text(orderId, style: pw.TextStyle(font: ttf)),
                       ],
                     ),
@@ -155,7 +159,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text('Customer:', style: pw.TextStyle(font: ttfBold)),
+                          pw.Text('Customer:',
+                              style: pw.TextStyle(font: ttfBold)),
                           pw.SizedBox(height: 5),
                           pw.Text(userName, style: pw.TextStyle(font: ttf)),
                         ],
@@ -165,9 +170,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text('Delivery Address:', style: pw.TextStyle(font: ttfBold)),
+                          pw.Text('Delivery Address:',
+                              style: pw.TextStyle(font: ttfBold)),
                           pw.SizedBox(height: 5),
-                          pw.Text(deliveryAddress, style: pw.TextStyle(font: ttf)),
+                          pw.Text(deliveryAddress,
+                              style: pw.TextStyle(font: ttf)),
                         ],
                       ),
                     ),
@@ -177,7 +184,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               pw.SizedBox(height: 20),
 
               // Items Table
-              pw.Text('Order Items', style: pw.TextStyle(font: ttfBold, fontSize: 16)),
+              pw.Text('Order Items',
+                  style: pw.TextStyle(font: ttfBold, fontSize: 16)),
               pw.SizedBox(height: 10),
               pw.Table(
                 border: pw.TableBorder.all(color: PdfColors.grey300),
@@ -189,19 +197,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 children: [
                   // Header row
                   pw.TableRow(
-                    decoration: const pw.BoxDecoration(color: PdfColors.grey200),
+                    decoration:
+                        const pw.BoxDecoration(color: PdfColors.grey200),
                     children: [
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Item', style: pw.TextStyle(font: ttfBold)),
+                        child:
+                            pw.Text('Item', style: pw.TextStyle(font: ttfBold)),
                       ),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Quantity', style: pw.TextStyle(font: ttfBold)),
+                        child: pw.Text('Quantity',
+                            style: pw.TextStyle(font: ttfBold)),
                       ),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(5),
-                        child: pw.Text('Price', style: pw.TextStyle(font: ttfBold)),
+                        child: pw.Text('Price',
+                            style: pw.TextStyle(font: ttfBold)),
                       ),
                     ],
                   ),
@@ -211,8 +223,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       children: [
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
-                          child:
-                              pw.Text(item.foodName ?? 'Unknown', style: pw.TextStyle(font: ttf)),
+                          child: pw.Text(item.foodName ?? 'Unknown',
+                              style: pw.TextStyle(font: ttf)),
                         ),
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
@@ -248,7 +260,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       children: [
                         pw.Container(
                           width: 120,
-                          child: pw.Text('Total Item Bill:', style: pw.TextStyle(font: ttf)),
+                          child: pw.Text('Total Item Bill:',
+                              style: pw.TextStyle(font: ttf)),
                         ),
                         pw.Container(
                           width: 80,
@@ -266,7 +279,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       children: [
                         pw.Container(
                           width: 120,
-                          child: pw.Text('Delivery Charge:', style: pw.TextStyle(font: ttf)),
+                          child: pw.Text('Delivery Charge:',
+                              style: pw.TextStyle(font: ttf)),
                         ),
                         pw.Container(
                           width: 80,
@@ -286,7 +300,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       children: [
                         pw.Container(
                           width: 120,
-                          child: pw.Text('Total Amount:', style: pw.TextStyle(font: ttfBold)),
+                          child: pw.Text('Total Amount:',
+                              style: pw.TextStyle(font: ttfBold)),
                         ),
                         pw.Container(
                           width: 80,
@@ -315,7 +330,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               pw.Center(
                 child: pw.Text(
                   'Food Hub - Delicious meals delivered to your doorstep',
-                  style: pw.TextStyle(font: ttf, fontSize: 10, color: PdfColors.grey700),
+                  style: pw.TextStyle(
+                      font: ttf, fontSize: 10, color: PdfColors.grey700),
                 ),
               ),
             ];
@@ -392,10 +408,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     itemBuilder: (context, index) {
                       final OrderItem item = orderController.foodItems[index];
 
-                      final String base64Image = item.foodImage.toString();
-                      final decodedImage = base64Decode(base64Image);
+                      final String FoodImages = item.foodImage.toString();
+
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
                         child: Row(
                           children: [
                             Container(
@@ -403,7 +420,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               width: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(image: MemoryImage(decodedImage))),
+                                  image: DecorationImage(
+                                      image: NetworkImage(FoodImages))),
                             ),
                             10.sizeWidth,
                             Column(
@@ -416,7 +434,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               ],
                             ),
                             const Spacer(),
-                            Text("₹${item.total}", style: AppTextStyle.w700(fontSize: 14)),
+                            Text("₹${item.total}",
+                                style: AppTextStyle.w700(fontSize: 14)),
                           ],
                         ),
                       );
@@ -427,11 +446,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 const Divider(thickness: 5),
                 _buildSectionHeader(Icons.receipt, "Bill Summary"),
                 10.sizeHeight,
-                _buildRow("Total item Bill", orderController.calculateTotalBill().toString()),
+                _buildRow("Total item Bill",
+                    orderController.calculateTotalBill().toString()),
                 const Divider(),
-                _buildRow("Delivery Charge", orderController.getDeliveryCharge().toString()),
+                _buildRow("Delivery Charge",
+                    orderController.getDeliveryCharge().toString()),
                 const Divider(),
-                _buildRow("Total Bill", orderController.getTotalBillWithDelivery().toString()),
+                _buildRow("Total Bill",
+                    orderController.getTotalBillWithDelivery().toString()),
 
                 // Download Button - Updated with Modern Design
                 Align(
@@ -448,11 +470,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               orderId: orderController.orderDetails["orderId"],
                               customerName: orderController.userDetails["name"],
                               orderDate: orderController.getOrderDate(),
-                              deliveryAddress: orderController.getDeliveryAddress(),
+                              deliveryAddress:
+                                  orderController.getDeliveryAddress(),
                               foodItems: orderController.foodItems,
                               itemTotal: orderController.calculateTotalBill(),
-                              deliveryCharge: orderController.getDeliveryCharge(),
-                              totalAmount: orderController.getTotalBillWithDelivery(),
+                              deliveryCharge:
+                                  orderController.getDeliveryCharge(),
+                              totalAmount:
+                                  orderController.getTotalBillWithDelivery(),
                               orderStatus: orderController.getOrderStatus(),
                               context: context,
                             );
@@ -467,7 +492,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                     ),
                     child: isGeneratingPdf
                         ? const SizedBox(
@@ -480,7 +506,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           )
                         : const Text(
                             "Download Invoice",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                   ),
                 ).paddingSymmetric(vertical: 10, horizontal: 10),
@@ -498,18 +525,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 // ).paddingSymmetric(horizontal: 15, vertical: 10),
 
                 const Divider(thickness: 5),
-                _buildSectionHeader(Icons.location_on_outlined, "Order Details"),
+                _buildSectionHeader(
+                    Icons.location_on_outlined, "Order Details"),
                 15.sizeHeight,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildColumn("Order ID", orderController.orderDetails['orderId'] ?? ''),
+                    _buildColumn("Order ID",
+                        orderController.orderDetails['orderId'] ?? ''),
                     const Divider(),
-                    _buildColumn("Order Address", orderController.getDeliveryAddress()),
+                    _buildColumn(
+                        "Order Address", orderController.getDeliveryAddress()),
                     const Divider(),
                     _buildColumn("Order Date", orderController.getOrderDate()),
                     const Divider(),
-                    _buildColumn("Receiver Details", orderController.userDetails['name'] ?? ''),
+                    _buildColumn("Receiver Details",
+                        orderController.userDetails['name'] ?? ''),
                     const Divider(thickness: 5),
                   ],
                 ),
@@ -533,20 +564,25 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         height: 30,
                                         width: 80,
                                         onPressed: () async {
-                                          String orderId = orderController.orderDetails['orderId'];
+                                          String orderId = orderController
+                                              .orderDetails['orderId'];
                                           try {
                                             await FirebaseFirestore.instance
                                                 .collection('orders')
                                                 .doc(orderId)
-                                                .update({'status': 'Cancelled'});
+                                                .update(
+                                                    {'status': 'Cancelled'});
 
                                             // Update order status in GetX state
-                                            orderController.updateOrderStatus("Cancelled");
+                                            orderController
+                                                .updateOrderStatus("Cancelled");
 
                                             Get.back();
-                                            Get.snackbar("Success", "Order has been cancelled");
+                                            Get.snackbar("Success",
+                                                "Order has been cancelled");
                                           } catch (e) {
-                                            Get.snackbar("Error", "Failed to cancel order");
+                                            Get.snackbar("Error",
+                                                "Failed to cancel order");
                                           }
                                         },
                                         text: "Yes",
@@ -626,8 +662,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return Container(
       height: 50,
       width: 50,
-      decoration:
-          BoxDecoration(color: iconColor.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+          color: iconColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10)),
       child: Icon(Icons.alarm, color: iconColor),
     );
   }

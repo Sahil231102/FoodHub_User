@@ -20,12 +20,16 @@ class AddToCartController extends GetxController {
       if (userId.isEmpty) throw Exception('User not logged in');
 
       // Fetch cart items
-      QuerySnapshot cartSnapshot =
-          await FirebaseFirestore.instance.collection('user').doc(userId).collection('cart').get();
+      QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(userId)
+          .collection('cart')
+          .get();
 
       List<String> foodIds = cartSnapshot.docs.map((doc) => doc.id).toList();
-      List<int> quantities =
-          cartSnapshot.docs.map((doc) => (doc['quantity'] as num).toInt()).toList();
+      List<int> quantities = cartSnapshot.docs
+          .map((doc) => (doc['quantity'] as num).toInt())
+          .toList();
 
       if (foodIds.isEmpty) {
         cartItems = [];
@@ -35,7 +39,8 @@ class AddToCartController extends GetxController {
       }
 
       List<DocumentSnapshot> foodDocs = await Future.wait(
-        foodIds.map((id) => FirebaseFirestore.instance.collection('foodItems').doc(id).get()),
+        foodIds.map((id) =>
+            FirebaseFirestore.instance.collection('FoodItems').doc(id).get()),
       );
 
       cartItems = List.generate(foodDocs.length, (index) {
@@ -46,7 +51,7 @@ class AddToCartController extends GetxController {
           'quantity': quantities[index],
           'name': foodData?['food_name'] ?? 'Unknown',
           'price': foodData?['food_price'] ?? '0',
-          'image': (foodData?['images'] as List<dynamic>?)?.first ?? '',
+          'image': (foodData?['image_urls'] as List<dynamic>?)?.first ?? '',
         };
       });
 
@@ -137,13 +142,14 @@ class AddToCartController extends GetxController {
           .doc(productId)
           .delete();
 
-      fetchCartItems(); // Refresh cart data
+      fetchCartItems();
     } catch (e) {
       print("Error removing item: $e");
     }
   }
 
   int getTotalPrice() {
+    // ignore: avoid_types_as_parameter_names
     return cartItems.fold<int>(0, (sum, item) {
       num price = num.tryParse(item['price'].toString()) ?? 0;
       num quantity = num.tryParse(item['quantity'].toString()) ?? 0;

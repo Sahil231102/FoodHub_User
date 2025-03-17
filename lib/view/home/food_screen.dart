@@ -50,14 +50,17 @@ class _FoodScreenState extends State<FoodScreen> {
                       },
                       decoration: InputDecoration(
                         hintText: 'Search for food...',
-                        hintStyle: AppTextStyle.w400(fontSize: 15, color: AppColors.black),
-                        prefixIcon: const Icon(Icons.search, color: AppColors.black),
+                        hintStyle: AppTextStyle.w400(
+                            fontSize: 15, color: AppColors.black),
+                        prefixIcon:
+                            const Icon(Icons.search, color: AppColors.black),
                         filled: true,
                         fillColor: Colors.white,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: const BorderSide(
-                            color: Colors.black, // Border color when not focused
+                            color:
+                                Colors.black, // Border color when not focused
                             width: 2, // Border width
                           ),
                         ),
@@ -73,7 +76,8 @@ class _FoodScreenState extends State<FoodScreen> {
                   ),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseServices.foodFirestore.snapshots(),
-                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(
@@ -91,7 +95,8 @@ class _FoodScreenState extends State<FoodScreen> {
                               SizedBox(height: 20),
                               Text(
                                 "Error loading data. Please try again later.",
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -108,15 +113,21 @@ class _FoodScreenState extends State<FoodScreen> {
                         ).paddingSymmetric(vertical: 20);
                       }
 
-                      final List<DocumentSnapshot> foodItems = snapshot.data!.docs;
+                      final List<DocumentSnapshot> foodItems =
+                          snapshot.data!.docs;
 
-                      final List<DocumentSnapshot> filteredFoodItems = foodItems.where((food) {
-                        String category = food['food_category']?.toString().toLowerCase() ?? '';
-                        String name = food['food_name']?.toString().toLowerCase() ?? '';
+                      final List<DocumentSnapshot> filteredFoodItems =
+                          foodItems.where((food) {
+                        String category =
+                            food['food_category']?.toString().toLowerCase() ??
+                                '';
+                        String name =
+                            food['food_name']?.toString().toLowerCase() ?? '';
 
                         bool matchesCategory = widget.foodCategory == null ||
                             category == widget.foodCategory!.toLowerCase();
-                        bool matchesSearch = searchQuery.isEmpty || name.contains(searchQuery);
+                        bool matchesSearch =
+                            searchQuery.isEmpty || name.contains(searchQuery);
 
                         return matchesCategory && matchesSearch;
                       }).toList();
@@ -138,45 +149,48 @@ class _FoodScreenState extends State<FoodScreen> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 final food = filteredFoodItems[index];
-                                final String foodName = food['food_name'] ?? 'No Name';
-                                final String foodCategory = food['food_category'] ?? 'No Category';
-                                final String foodPrice = food['food_price'] ?? '0';
-                                final List<dynamic> base64Images = food['images'] ?? [];
-                                Uint8List? firstImageBytes;
-
-                                if (base64Images.isNotEmpty) {
-                                  try {
-                                    firstImageBytes = base64Decode(base64Images[0]) as Uint8List?;
-                                  } catch (e) {
-                                    Get.snackbar("Error", e.toString());
-                                  }
-                                }
+                                final String foodName =
+                                    food['food_name'] ?? 'No Name';
+                                final String foodCategory =
+                                    food['food_category'] ?? 'No Category';
+                                final String foodPrice =
+                                    food['food_price'] ?? '0';
+                                final List<dynamic> base64Images =
+                                    food['image_urls'] ?? [];
+                                final String imageUrl = base64Images.isNotEmpty
+                                    ? base64Images[0]
+                                    : '';
 
                                 return GestureDetector(
                                   onTap: () => NavigationServices.to(
-                                    () => FoodDetailsScreen(documentId: food['food_id']),
+                                    () => FoodDetailsScreen(
+                                        documentId: food['food_id']),
                                   ),
                                   child: Card(
                                     color: Colors.black87,
                                     elevation: 1,
-                                    margin: const EdgeInsets.symmetric(vertical: 5),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
                                     child: Padding(
                                       padding: const EdgeInsets.all(15.0),
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             height: 80,
                                             width: 80,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                               border: Border.all(
                                                 color: AppColors.white,
                                                 width: 3,
                                               ),
-                                              image: firstImageBytes != null
+                                              image: imageUrl.isNotEmpty
                                                   ? DecorationImage(
-                                                      image: MemoryImage(firstImageBytes),
+                                                      image: NetworkImage(
+                                                          imageUrl),
                                                       fit: BoxFit.cover,
                                                     )
                                                   : null,
@@ -185,7 +199,8 @@ class _FoodScreenState extends State<FoodScreen> {
                                           const SizedBox(width: 10),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   foodName,
@@ -193,7 +208,8 @@ class _FoodScreenState extends State<FoodScreen> {
                                                     fontSize: 15,
                                                     color: AppColors.white,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                                 5.sizeHeight,
                                                 Text(
@@ -220,7 +236,8 @@ class _FoodScreenState extends State<FoodScreen> {
                                   ),
                                 );
                               },
-                              separatorBuilder: (context, index) => const Divider(
+                              separatorBuilder: (context, index) =>
+                                  const Divider(
                                 thickness: 3,
                               ),
                             );

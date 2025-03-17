@@ -25,10 +25,11 @@ class InvoiceGenerator {
     required String orderStatus,
   }) async {
     final pdf = pw.Document();
-    final font =
-        pw.Font.ttf(await rootBundle.load("assets/font/sofia-pro/Sofia Pro Regular Az.otf"));
-    final fontBold =
-        pw.Font.ttf(await rootBundle.load("assets/font/sofia-pro/Sofia Pro Bold Az.otf"));
+    // ignore: unused_local_variable
+    final font = pw.Font.ttf(await rootBundle
+        .load("assets/font/sofia-pro/Sofia Pro Regular Az.otf"));
+    final fontBold = pw.Font.ttf(
+        await rootBundle.load("assets/font/sofia-pro/Sofia Pro Bold Az.otf"));
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -37,18 +38,20 @@ class InvoiceGenerator {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               // Header
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
-                pw.Text('INVOICE',
-                    style: pw.TextStyle(
-                        fontBold: pw.Font.timesBoldItalic(),
-                        fontSize: 24,
-                        fontWeight: pw.FontWeight.bold)),
-                pw.Text('Food Hub',
-                    style: pw.TextStyle(
-                        fontBold: pw.Font.timesBoldItalic(),
-                        fontSize: 20,
-                        fontWeight: pw.FontWeight.bold)),
-              ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('INVOICE',
+                        style: pw.TextStyle(
+                            fontBold: pw.Font.timesBoldItalic(),
+                            fontSize: 24,
+                            fontWeight: pw.FontWeight.bold)),
+                    pw.Text('Food Hub',
+                        style: pw.TextStyle(
+                            fontBold: pw.Font.timesBoldItalic(),
+                            fontSize: 20,
+                            fontWeight: pw.FontWeight.bold)),
+                  ]),
               pw.SizedBox(height: 20),
 
               // Order Info
@@ -66,15 +69,18 @@ class InvoiceGenerator {
                       children: [
                         pw.Text('Order ID: $orderId',
                             style: pw.TextStyle(
-                                font: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                font: pw.Font.timesItalic(),
+                                fontWeight: pw.FontWeight.bold)),
                         pw.SizedBox(height: 5),
                         pw.Text('Date: $orderDate',
                             style: pw.TextStyle(
-                                fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                fontBold: pw.Font.timesItalic(),
+                                fontWeight: pw.FontWeight.bold)),
                         pw.SizedBox(height: 5),
                         pw.Text('Status: $orderStatus',
                             style: pw.TextStyle(
-                                fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                fontBold: pw.Font.timesItalic(),
+                                fontWeight: pw.FontWeight.bold)),
                       ],
                     ),
                     pw.Column(
@@ -87,14 +93,16 @@ class InvoiceGenerator {
                         pw.SizedBox(height: 5),
                         pw.Text(customerName,
                             style: pw.TextStyle(
-                                fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                fontBold: pw.Font.timesItalic(),
+                                fontWeight: pw.FontWeight.bold)),
                         pw.SizedBox(height: 5),
                         pw.Container(
                           width: 200,
                           child: pw.Text(deliveryAddress,
                               maxLines: 3,
                               style: pw.TextStyle(
-                                  fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                  fontBold: pw.Font.timesItalic(),
+                                  fontWeight: pw.FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -150,37 +158,42 @@ class InvoiceGenerator {
                 children: List.generate(foodItems.length, (index) {
                   final item = foodItems[index];
                   // Safeguard against division by zero and ensure proper calculation
-                  final unitPrice = (item.total.isNotEmpty &&
-                          item.quantity != null &&
-                          item.quantity.toString() != "0")
-                      ? (double.tryParse(item.total) ?? 0.0) /
-                          (int.tryParse(item.quantity.toString()) ?? 1) // ✅ Convert safely
-                      : (double.tryParse(item.total) ?? 0.0);
+                  final unitPrice =
+                      (item.total.isNotEmpty && item.quantity.toString() != "0")
+                          ? (double.tryParse(item.total) ?? 0.0) /
+                              (int.tryParse(item.quantity.toString()) ??
+                                  1) // ✅ Convert safely
+                          : (double.tryParse(item.total) ?? 0.0);
 
                   return pw.Container(
                     decoration: pw.BoxDecoration(
-                      border: pw.Border(bottom: pw.BorderSide(color: PdfColors.grey300)),
+                      border: pw.Border(
+                          bottom: pw.BorderSide(color: PdfColors.grey300)),
                     ),
-                    padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                    padding: const pw.EdgeInsets.symmetric(
+                        vertical: 8, horizontal: 5),
                     child: pw.Row(
                       children: [
                         pw.Expanded(
                           flex: 1,
                           child: pw.Text('${index + 1}',
                               style: pw.TextStyle(
-                                  fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                  fontBold: pw.Font.timesItalic(),
+                                  fontWeight: pw.FontWeight.bold)),
                         ),
                         pw.Expanded(
                           flex: 5,
                           child: pw.Text(item.foodName ?? 'Unknown',
                               style: pw.TextStyle(
-                                  fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                  fontBold: pw.Font.timesItalic(),
+                                  fontWeight: pw.FontWeight.bold)),
                         ),
                         pw.Expanded(
                           flex: 1,
                           child: pw.Text('${item.quantity}',
                               style: pw.TextStyle(
-                                  fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                  fontBold: pw.Font.timesItalic(),
+                                  fontWeight: pw.FontWeight.bold)),
                         ),
                         pw.Expanded(
                             flex: 2,
@@ -192,7 +205,8 @@ class InvoiceGenerator {
                           flex: 2,
                           child: pw.Text('Rs ${item.total}',
                               style: pw.TextStyle(
-                                  fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                  fontBold: pw.Font.timesItalic(),
+                                  fontWeight: pw.FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -218,7 +232,8 @@ class InvoiceGenerator {
                         pw.SizedBox(width: 50),
                         pw.Text('Rs ${itemTotal.toStringAsFixed(2)}',
                             style: pw.TextStyle(
-                                fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                fontBold: pw.Font.timesItalic(),
+                                fontWeight: pw.FontWeight.bold)),
                       ],
                     ),
                     pw.SizedBox(height: 5),
@@ -232,7 +247,8 @@ class InvoiceGenerator {
                         pw.SizedBox(width: 50),
                         pw.Text('Rs ${deliveryCharge.toStringAsFixed(2)}',
                             style: pw.TextStyle(
-                                fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                                fontBold: pw.Font.timesItalic(),
+                                fontWeight: pw.FontWeight.bold)),
                       ],
                     ),
                     pw.Divider(),
@@ -247,7 +263,8 @@ class InvoiceGenerator {
                         pw.Text(
                           'Rs ${totalAmount.toStringAsFixed(2)}',
                           style: pw.TextStyle(
-                              fontBold: pw.Font.timesBoldItalic(), fontWeight: pw.FontWeight.bold),
+                              fontBold: pw.Font.timesBoldItalic(),
+                              fontWeight: pw.FontWeight.bold),
                         ),
                       ],
                     ),
@@ -267,7 +284,8 @@ class InvoiceGenerator {
                 child: pw.Text(
                     'Generated on ${DateFormat('dd MMM yyyy HH:mm').format(DateTime.now())}',
                     style: pw.TextStyle(
-                        fontBold: pw.Font.timesItalic(), fontWeight: pw.FontWeight.bold)),
+                        fontBold: pw.Font.timesItalic(),
+                        fontWeight: pw.FontWeight.bold)),
               ),
             ],
           );

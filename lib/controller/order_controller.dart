@@ -39,7 +39,7 @@ class OrderItem {
       total: map['total'] ?? '0',
       foodName: map['foodName'],
       foodPrice: map['foodPrice'],
-      foodImage: map['images'],
+      foodImage: map['image_urls'],
     );
   }
 }
@@ -76,23 +76,30 @@ class OrderController extends GetxController {
     try {
       _isLoading.value = true;
 
-      final orderDoc = await FirebaseFirestore.instance.collection('orders').doc(orderId).get();
+      final orderDoc = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .get();
       if (!orderDoc.exists) {
         Get.snackbar("Error", "Order not found");
         return;
       }
       _orderDetails.value = Map<String, dynamic>.from(orderDoc.data() ?? {});
 
-      final userDoc =
-          await FirebaseFirestore.instance.collection('user').doc(_orderDetails['userId']).get();
+      final userDoc = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(_orderDetails['userId'])
+          .get();
       if (userDoc.exists) {
         _userDetails.value = Map<String, dynamic>.from(userDoc.data() ?? {});
       }
 
       final List<OrderItem> items = [];
       for (var item in (_orderDetails['items'] as List? ?? [])) {
-        final foodDoc =
-            await FirebaseFirestore.instance.collection('FoodItems').doc(item['foodId']).get();
+        final foodDoc = await FirebaseFirestore.instance
+            .collection('FoodItems')
+            .doc(item['foodId'])
+            .get();
 
         if (foodDoc.exists && foodDoc.data() != null) {
           final foodData = foodDoc.data()!;
@@ -103,11 +110,12 @@ class OrderController extends GetxController {
               total: item['total'],
               foodName: foodData['food_name'] ?? 'Unknown',
               foodPrice: foodData['food_price']?.toString() ?? '0',
-              foodImage: foodData['images'] != null && foodData['images'] is List
-                  ? (foodData['images'] as List).isNotEmpty
-                      ? (foodData['images'] as List).first
+              foodImage: foodData['image_urls'] != null &&
+                      foodData['image_urls'] is List
+                  ? (foodData['image_urls'] as List).isNotEmpty
+                      ? (foodData['image_urls'] as List).first
                       : null
-                  : foodData['images']?.toString(),
+                  : foodData['image_urls']?.toString(),
             ),
           );
         }
@@ -125,7 +133,10 @@ class OrderController extends GetxController {
   Future<void> updateOrderStatus(String status) async {
     try {
       String orderId = _orderDetails['orderId'];
-      await FirebaseFirestore.instance.collection('orders').doc(orderId).update({'status': status});
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .update({'status': status});
 
       // Update order status locally
       _orderDetails['status'] = status;
@@ -143,7 +154,8 @@ class OrderController extends GetxController {
 
   double getDeliveryCharge() => 50.0;
 
-  double getTotalBillWithDelivery() => calculateTotalBill() + getDeliveryCharge();
+  double getTotalBillWithDelivery() =>
+      calculateTotalBill() + getDeliveryCharge();
 
   String getOrderStatus() => _orderDetails['status'] ?? 'Pending';
 

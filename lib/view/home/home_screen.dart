@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_hub_user/controller/category_controller.dart';
 import 'package:food_hub_user/controller/get_user_info_controller.dart';
 import 'package:food_hub_user/core/const/images.dart';
 import 'package:food_hub_user/core/utils/sized_box.dart';
-import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:food_hub_user/view/home/food_screen.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -18,13 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GetUserInfoController _getUserController = Get.put(GetUserInfoController());
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  final GetUserInfoController _getUserController =
+      Get.put(GetUserInfoController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
       AppImages.page_4,
     ];
 
-    final List<String> categoriesImages = [
-      AppImages.Gujarati_thali,
-      AppImages.paneer_Sabji,
-      AppImages.Panjabi_thali,
-      AppImages.Cold_drink,
-    ];
-    final List<String> categoriesName = [
-      "Gujarati",
-      "Burgers",
-      "Panjabi Thali",
-      "Cold Drink",
-    ];
     var userData = _getUserController.userData;
+    final CategoryController controller = Get.put(CategoryController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -116,55 +100,63 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               width: double.infinity,
               height: 130,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: categoriesImages.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: GestureDetector(
-                        onTap: () {
-                          NavigationServices.to(
-                            () => FoodScreen(
-                              foodCategory: categoriesName[index],
+              child: Obx(
+                () => controller.categories.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.categories.length,
+                        itemBuilder: (context, index) {
+                          final category = controller.categories[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(() => FoodScreen(
+                                      foodCategory: category['category_name'],
+                                    ));
+                              },
+                              child: Container(
+                                height: 100,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 80,
+                                        width: 80,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                                category['image_url']),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        category['category_name'],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           );
                         },
-                        child: Container(
-                          height: 100,
-                          width: 130,
-                          decoration: BoxDecoration(
-                            color: AppColors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 80,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                          categoriesImages[index],
-                                        ),
-                                        fit: BoxFit.cover),
-                                  ),
-                                ),
-                                10.sizeHeight,
-                                Text(
-                                  categoriesName[index],
-                                  style: AppTextStyle.w700(color: AppColors.white, fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ));
-                },
+                      ),
               ),
             ),
             10.sizeHeight,
@@ -225,12 +217,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       horizontal: 10,
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Chicken Burger",
                                           style: AppTextStyle.w700(
-                                              color: AppColors.white, fontSize: 17),
+                                              color: AppColors.white,
+                                              fontSize: 17),
                                         ),
                                         Text(
                                           "₹120",

@@ -14,6 +14,7 @@ class CommonTextField extends StatelessWidget {
   final String? labelText;
   final bool obscureText;
   final Widget? prefixIcon;
+  final int? maxLength;
 
   final void Function()? onTap;
 
@@ -28,7 +29,8 @@ class CommonTextField extends StatelessWidget {
       this.onTap,
       this.prefixIcon,
       this.readOnly,
-      this.keyboardType});
+      this.keyboardType,
+      this.maxLength});
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +38,16 @@ class CommonTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(labelText ?? "",
-            style: AppTextStyle.w300(fontSize: 16, color: AppColors.labelTextColor)),
+            style: AppTextStyle.w600(
+              fontSize: 16,
+              color: AppColors.labelTextColor,
+            )),
         12.sizeHeight,
         TextFormField(
           keyboardType: keyboardType ?? TextInputType.text,
           readOnly: readOnly ?? false,
           onTap: onTap,
+          maxLength: maxLength,
           obscureText: obscureText,
           controller: controller,
           validator: validator,
@@ -52,9 +58,11 @@ class CommonTextField extends StatelessWidget {
             ),
           ),
           decoration: InputDecoration(
+            counterText: "",
             contentPadding: const EdgeInsets.all(20),
             hintText: hintText,
-            hintStyle: AppTextStyle.w400(color: AppColors.hintTextColor, fontSize: 17),
+            hintStyle:
+                AppTextStyle.w400(color: AppColors.hintTextColor, fontSize: 17),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             filled: true,
@@ -73,6 +81,7 @@ class CommonTextField extends StatelessWidget {
 
   OutlineInputBorder _border({Color color = AppColors.primary}) {
     return OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: color));
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: color));
   }
 }

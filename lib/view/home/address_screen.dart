@@ -18,7 +18,8 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
-  final OnlinePaymentController onlinePaymentController = Get.put(OnlinePaymentController());
+  final OnlinePaymentController onlinePaymentController =
+      Get.put(OnlinePaymentController());
   final TextEditingController flatNumberController = TextEditingController();
   final TextEditingController homeAddressController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
@@ -68,28 +69,33 @@ class _AddressScreenState extends State<AddressScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CommonTextField(
-                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter Flat Number" : null,
+                  validator: (p0) => p0 == null || p0.isEmpty
+                      ? "Please Enter Flat Number"
+                      : null,
                   labelText: "Flat No",
                   hintText: "Flat Number",
                   controller: flatNumberController,
                 ),
                 10.sizeHeight,
                 CommonTextField(
-                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter Address" : null,
+                  validator: (p0) =>
+                      p0 == null || p0.isEmpty ? "Please Enter Address" : null,
                   labelText: "Address",
                   hintText: "Address",
                   controller: homeAddressController,
                 ),
                 10.sizeHeight,
                 CommonTextField(
-                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter Landmark" : null,
+                  validator: (p0) =>
+                      p0 == null || p0.isEmpty ? "Please Enter Landmark" : null,
                   labelText: "Near By",
                   hintText: "Landmark",
                   controller: landmarkController,
                 ),
                 10.sizeHeight,
                 CommonTextField(
-                  validator: (p0) => p0 == null || p0.isEmpty ? "Please Enter City" : null,
+                  validator: (p0) =>
+                      p0 == null || p0.isEmpty ? "Please Enter City" : null,
                   labelText: "City",
                   hintText: "City",
                   controller: cityController,
@@ -101,6 +107,7 @@ class _AddressScreenState extends State<AddressScreen> {
                     if (p0.length != 6) return "Enter a 6 Digit Pincode";
                     return null;
                   },
+                  maxLength: 6,
                   keyboardType: TextInputType.number,
                   labelText: "Pincode",
                   hintText: "Pincode",
@@ -139,7 +146,9 @@ class _AddressScreenState extends State<AddressScreen> {
                 20.sizeHeight,
                 Center(
                   child: CommonButton(
-                    text: _selectPaymentMethod == "ONLINE" ? "Pay With ONLINE" : "Submit Order",
+                    text: _selectPaymentMethod == "ONLINE"
+                        ? "Pay With ONLINE"
+                        : "Submit Order",
                     onPressed: _submitOrder,
                   ),
                 ),

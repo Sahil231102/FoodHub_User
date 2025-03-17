@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/controller/add_to_cart_controller.dart';
@@ -35,7 +33,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    foodDetailsFuture = _fireStore.collection('FoodItems').doc(widget.documentId).get();
+    foodDetailsFuture =
+        _fireStore.collection('FoodItems').doc(widget.documentId).get();
   }
 
   @override
@@ -48,7 +47,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: foodDetailsFuture,
-          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
+          builder: (BuildContext context,
+              AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -73,7 +73,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
             }
 
             final foodData = snapshot.data!.data() as Map<String, dynamic>;
-            final List<dynamic> images = foodData['images'] ?? [];
+            final List<dynamic> images = foodData['image_urls'] ?? [];
             final String foodName = foodData['food_name'] ?? "Unknown";
             final String foodPrice = foodData['food_price'] ?? "Unknown";
             final String foodId = foodData['food_id'] ?? "Unknown";
@@ -90,7 +90,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                     itemCount: images.length,
                     itemBuilder: (context, index) {
                       final String base64Image = images[index];
-                      final decodedImage = base64Decode(base64Image);
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -98,9 +97,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                           decoration: BoxDecoration(
                             color: AppColors.white,
                             image: DecorationImage(
-                              image: MemoryImage(
-                                decodedImage,
-                              ),
+                              image: NetworkImage(base64Image),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -130,7 +127,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                               ),
                               Text(
                                 foodName,
-                                style: AppTextStyle.w700(fontSize: 12, color: AppColors.grey),
+                                style: AppTextStyle.w700(
+                                    fontSize: 12, color: AppColors.grey),
                               ),
                             ],
                           ),
@@ -152,67 +150,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                         ],
                       ),
                       10.sizeHeight,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "₹$foodPrice",
-                            style: AppTextStyle.w700(
-                              fontSize: 16,
-                            ),
-                          ),
-                          GetBuilder<FoodDetailsController>(builder: (controller) {
-                            return Row(
-                              children: [
-                                Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        controller.decrement();
-                                      },
-                                      child: const Icon(
-                                        Icons.remove,
-                                        color: Colors.white,
-                                        size: 12, // Adjust size to fit within 20x20 container
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Text(
-                                    controller.itemCount.toString(),
-                                    style: AppTextStyle.w700(fontSize: 20),
-                                  ),
-                                ),
-                                Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      controller.increment();
-                                    },
-                                    icon: const Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                      size: 13,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          })
-                        ],
+                      Text(
+                        "₹$foodPrice",
+                        style: AppTextStyle.w700(
+                          fontSize: 16,
+                        ),
                       ),
                       10.sizeHeight,
                       Text(
@@ -232,29 +174,24 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                         maxLines: 7,
                       ),
                       20.sizeHeight,
-                      GetBuilder<AddToCartController>(builder: (controller) {
-                        return controller.isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator()) // Show loader while adding
-                            : Center(
-                                child: CommonButton(
-                                  onPressed: () async {
-                                    double quantity = foodController.itemCount.toDouble();
-                                    setState(() {});
-                                    await controller.addToCart(
-                                      foodId: foodId.toString(),
-                                      quantity: quantity.toDouble(),
-                                    );
-                                    AppSnackbar.showSuccess(
-                                        message: "Food successfully added to cart!");
-                                    // Navigate to cart screen after adding
-                                    NavigationServices.offAll(
-                                        () => const BottomNavigationBarScreen());
-                                  },
-                                  text: "Add To Cart",
-                                ),
-                              );
-                      }),
+                      Center(
+                        child: CommonButton(
+                          onPressed: () async {
+                            double quantity =
+                                foodController.itemCount.toDouble();
+                            setState(() {});
+                            await cartController.addToCart(
+                              foodId: foodId.toString(),
+                              quantity: quantity.toDouble(),
+                            );
+                            AppSnackbar.showSuccess(
+                                message: "Food successfully added to cart!");
+                            NavigationServices.offAll(
+                                () => const BottomNavigationBarScreen());
+                          },
+                          text: "Add To Cart",
+                        ),
+                      ),
                       20.sizeHeight,
                     ],
                   ),
