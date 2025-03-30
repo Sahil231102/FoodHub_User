@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/controller/category_controller.dart';
 import 'package:food_hub_user/controller/get_user_info_controller.dart';
+import 'package:food_hub_user/core/component/home_food_controller.dart';
 import 'package:food_hub_user/core/const/images.dart';
 import 'package:food_hub_user/core/utils/sized_box.dart';
+import 'package:food_hub_user/view/home/food_details_screen.dart';
 import 'package:food_hub_user/view/home/food_screen.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -20,6 +22,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GetUserInfoController _getUserController =
       Get.put(GetUserInfoController());
+
+  final HomeFoodController homeFoodController = Get.put(HomeFoodController());
 
   @override
   Widget build(BuildContext context) {
@@ -173,64 +177,77 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             10.sizeHeight,
-            SizedBox(
-              height: 210,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Stack(
-                      children: [
-                        Card(
-                          color: Colors.black,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Container(
-                                  height: 80,
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: const DecorationImage(
-                                        image: AssetImage(
-                                          AppImages.burger,
-                                        ),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(color: AppColors.white),
-                                  ),
-                                ),
-                              ),
-                              Row(
+            Obx(
+              () => SizedBox(
+                height: 210,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: homeFoodController.foodItems.length,
+                  itemBuilder: (context, index) {
+                    var foodItem = homeFoodController.foodItems[index].data()
+                        as Map<String, dynamic>;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Stack(
+                        children: [
+                          Card(
+                            color: Colors.black,
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: SizedBox(
+                              width: 140, // **Fixed width**
+                              height: 200, // **Fixed height**
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Container(
+                                      height: 80,
+                                      width: double
+                                          .infinity, // **Take full width**
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                              foodItem['image_urls'][0]),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        border: Border.all(color: Colors.white),
+                                      ),
                                     ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "Chicken Burger",
-                                          style: AppTextStyle.w700(
-                                              color: AppColors.white,
-                                              fontSize: 17),
+                                        SizedBox(
+                                          width: 120, // **Fix width for text**
+                                          child: Text(
+                                            foodItem['food_name'],
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow
+                                                .ellipsis, // **Trim text if too long**
+                                          ),
                                         ),
+                                        SizedBox(height: 4),
                                         Text(
-                                          "₹120",
-                                          style: AppTextStyle.w700(
-                                            color: AppColors.white,
-                                            fontSize: 17,
+                                          '₹${foodItem['food_price']}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                       ],
@@ -238,36 +255,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 15,
-                          right: 12,
-                          child: Container(
-                            height: 35,
-                            width: 70,
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(
-                                20,
-                              ),
-                            ),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "View",
-                                style: AppTextStyle.w700(fontSize: 16),
-                              ),
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                },
+                          Positioned(
+                            bottom: 15,
+                            right: 12,
+                            child: Container(
+                              height: 35,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Get.to(() => FoodDetailsScreen(
+                                      documentId: foodItem['food_id']));
+                                },
+                                child: const Text(
+                                  "View",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),

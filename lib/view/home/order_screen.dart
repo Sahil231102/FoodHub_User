@@ -69,15 +69,47 @@ class _OrderScreenState extends State<OrderScreen> {
                         height: 75,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 5,
+                          itemCount: order["items"].length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              width: 60,
-                              decoration: BoxDecoration(
-                                color: AppColors.black,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ).paddingSymmetric(horizontal: 5, vertical: 10);
+                            String foodId = order["items"][index]["foodId"];
+                            return FutureBuilder<DocumentSnapshot>(
+                              future: FirebaseFirestore.instance
+                                  .collection('FoodItems')
+                                  .doc(foodId)
+                                  .get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                if (!snapshot.hasData ||
+                                    !snapshot.data!.exists) {
+                                  return const Icon(Icons.image_not_supported,
+                                      size: 60);
+                                }
+                                var foodData = snapshot.data!.data()
+                                    as Map<String, dynamic>;
+                                String? imageUrl =
+                                    (foodData['image_urls'] as List?)?.first;
+
+                                return imageUrl != null
+                                    ? Container(
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image: NetworkImage(imageUrl),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ).paddingSymmetric(
+                                        horizontal: 5, vertical: 10)
+                                    : const Icon(Icons.image_not_supported,
+                                        size: 60);
+                              },
+                            );
                           },
                         ),
                       ),

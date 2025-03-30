@@ -57,6 +57,7 @@ dependencies:
   open_file: ^3.3.2
   share_plus: ^7.2.2
   csc_picker_plus: ^0.0.3
+  loader_overlay: ^5.0.0
 
 
 dev_dependencies:

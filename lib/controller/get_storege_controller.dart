@@ -6,12 +6,12 @@ import 'package:get_storage/get_storage.dart';
 class GetStorageController extends GetxController {
   void checkUserData() async {
     var box = GetStorage();
-    await Future.delayed(const Duration(seconds: 2)); // Simulate splash screen delay
-    bool isLoggedIn = box.read('isLoggedIn') ?? false; // Check if the user is logged in
+    await Future.delayed(const Duration(seconds: 2));
+    bool isLoggedIn = box.read('isLoggedIn') ?? false;
     if (isLoggedIn) {
-      Get.offAll(() => const BottomNavigationBarScreen()); // Navigate to HomeScreen if logged in
+      Get.offAll(() => const BottomNavigationBarScreen());
     } else {
-      Get.offAll(() => const WelcomeScreen()); // Otherwise, show WelcomeScreen
+      Get.offAll(() => const WelcomeScreen());
     }
   }
 }

@@ -20,11 +20,8 @@ class AddToCartController extends GetxController {
       if (userId.isEmpty) throw Exception('User not logged in');
 
       // Fetch cart items
-      QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
-          .collection('user')
-          .doc(userId)
-          .collection('cart')
-          .get();
+      QuerySnapshot cartSnapshot =
+          await FirebaseFirestore.instance.collection('cart').get();
 
       List<String> foodIds = cartSnapshot.docs.map((doc) => doc.id).toList();
       List<int> quantities = cartSnapshot.docs
@@ -47,6 +44,8 @@ class AddToCartController extends GetxController {
         var foodData = foodDocs[index].data() as Map<String, dynamic>?;
 
         return {
+          'cartId': foodIds[index],
+          'userId': userId,
           'foodId': foodIds[index],
           'quantity': quantities[index],
           'name': foodData?['food_name'] ?? 'Unknown',
@@ -75,32 +74,24 @@ class AddToCartController extends GetxController {
       if (userId.isEmpty) throw Exception('User not logged in');
 
       // Check if product already exists in cart
-      DocumentSnapshot cartDoc = await FirebaseFirestore.instance
-          .collection('user')
-          .doc(userId)
-          .collection('cart')
-          .doc(foodId)
-          .get();
+      DocumentSnapshot cartDoc =
+          await FirebaseFirestore.instance.collection('cart').doc(foodId).get();
 
       if (cartDoc.exists) {
         int currentQuantity = cartDoc['quantity'];
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc(userId)
-            .collection('cart')
-            .doc(foodId)
-            .update({
+        await FirebaseFirestore.instance.collection('cart').doc(foodId).update({
           'foodId': foodId,
           'quantity': currentQuantity + quantity,
         });
       } else {
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('cart').doc();
+        String cartId = docRef.id;
+
         // If item doesn't exist, add it
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc(userId)
-            .collection('cart')
-            .doc(foodId)
-            .set({
+        await FirebaseFirestore.instance.collection('cart').doc(cartId).set({
+          'cartId': cartId,
+          'userId': userId,
           'foodId': foodId,
           'quantity': quantity,
         });
@@ -109,7 +100,7 @@ class AddToCartController extends GetxController {
     } catch (e) {
       print("Error adding item to cart: $e");
     } finally {
-      isLoading = false; // Set loading to true
+      isLoading = false; // Set loading to false
       update();
     }
   }

@@ -374,7 +374,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 // Status Container
                 Container(
                   height: 80,
-                  decoration: const BoxDecoration(color: AppColors.white),
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                  ),
                   child: Row(
                     children: [
                       10.sizeWidth,
@@ -646,26 +648,34 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   Widget _buildStatusIcon(String status) {
     Color iconColor;
+    IconData iconData;
+
     switch (status) {
       case "Pending":
         iconColor = Colors.yellow.shade700;
+        iconData = Icons.hourglass_top; // Pending icon
         break;
       case "Cancelled":
         iconColor = Colors.red.shade700;
+        iconData = Icons.cancel; // Cancelled icon
         break;
-      case "Delivered":
+      case "Confirmed":
         iconColor = Colors.green.shade700;
+        iconData = Icons.check_circle; // Confirmed icon
         break;
       default:
         iconColor = Colors.grey;
+        iconData = Icons.help_outline; // Default icon
     }
+
     return Container(
       height: 50,
       width: 50,
       decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10)),
-      child: Icon(Icons.alarm, color: iconColor),
+        color: iconColor.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(iconData, color: iconColor),
     );
   }
 }

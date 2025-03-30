@@ -3,6 +3,7 @@ import 'package:food_hub_user/controller/online_payment_controller.dart';
 import 'package:food_hub_user/core/const/colors.dart';
 import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../core/component/common_app_bar.dart';
 import '../../core/component/common_button.dart';
@@ -10,8 +11,10 @@ import '../../core/component/common_text_field.dart';
 
 class AddressScreen extends StatefulWidget {
   final String payment;
+  final String mobileNumber;
 
-  const AddressScreen({super.key, required this.payment});
+  const AddressScreen(
+      {super.key, required this.payment, required this.mobileNumber});
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
@@ -28,7 +31,7 @@ class _AddressScreenState extends State<AddressScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _selectPaymentMethod = "";
 
-  void _submitOrder() {
+  void _submitOrder() async {
     if (_formKey.currentState?.validate() ?? false) {
       onlinePaymentController.setUserAddress(
         flatNumber: flatNumberController.text,
@@ -38,13 +41,24 @@ class _AddressScreenState extends State<AddressScreen> {
         pinCode: pinCodeController.text,
       );
 
-      if (_selectPaymentMethod == "ONLINE") {
-        onlinePaymentController.openCheckout(
-          payment: widget.payment.toString(),
-          mobileNumber: "9909498426",
+      context.loaderOverlay.show(); // Show loader before starting
+
+      try {
+        if (_selectPaymentMethod == "ONLINE") {
+          await onlinePaymentController.openCheckout(
+            payment: widget.payment.toString(),
+            mobileNumber: widget.mobileNumber,
+          );
+        } else if (_selectPaymentMethod == "CASH") {
+          await onlinePaymentController
+              .placeCashOrder(widget.payment.toString());
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${e.toString()}")),
         );
-      } else if (_selectPaymentMethod == "CASH") {
-        onlinePaymentController.placeCashOrder(widget.payment.toString());
+      } finally {
+        context.loaderOverlay.hide(); // Hide loader after completion
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -145,12 +159,16 @@ class _AddressScreenState extends State<AddressScreen> {
                 ),
                 20.sizeHeight,
                 Center(
-                  child: CommonButton(
-                    text: _selectPaymentMethod == "ONLINE"
-                        ? "Pay With ONLINE"
-                        : "Submit Order",
-                    onPressed: _submitOrder,
-                  ),
+                  child: _selectPaymentMethod == "ONLINE"
+                      ? CommonButton(
+                          width: 200,
+                          text: "Pay With Online",
+                          onPressed: _submitOrder,
+                        )
+                      : CommonButton(
+                          text: "Pay with Cash",
+                          onPressed: _submitOrder,
+                        ),
                 ),
                 20.sizeHeight,
               ],

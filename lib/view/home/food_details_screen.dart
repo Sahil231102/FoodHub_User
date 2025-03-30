@@ -9,6 +9,7 @@ import 'package:food_hub_user/core/utils/app_snackbar.dart';
 import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../core/component/bottom_navigation_bar_screen.dart';
 import '../../core/component/common_button.dart';
@@ -177,6 +178,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                       Center(
                         child: CommonButton(
                           onPressed: () async {
+                            context.loaderOverlay.show();
                             double quantity =
                                 foodController.itemCount.toDouble();
                             setState(() {});
@@ -188,6 +190,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 message: "Food successfully added to cart!");
                             NavigationServices.offAll(
                                 () => const BottomNavigationBarScreen());
+                            context.loaderOverlay.hide();
                           },
                           text: "Add To Cart",
                         ),

@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:food_hub_user/controller/add_to_cart_controller.dart';
+import 'package:food_hub_user/controller/cart_controller.dart';
 import 'package:food_hub_user/core/utils/sized_box.dart';
 import 'package:food_hub_user/services/navigation_services.dart';
 import 'package:food_hub_user/view/home/address_screen.dart';
 import 'package:get/get.dart';
-
+import 'package:loader_overlay/loader_overlay.dart';
 import '../../core/component/common_app_bar.dart';
 import '../../core/component/common_button.dart';
 import '../../core/const/colors.dart';
@@ -21,7 +18,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final AddToCartController cartController = Get.put(AddToCartController());
+  final CartController cartController = Get.put(CartController());
 
   @override
   void initState() {
@@ -35,7 +32,7 @@ class _CartScreenState extends State<CartScreen> {
       appBar: const CommonAppBar(
         text: "Cart",
       ),
-      body: GetBuilder<AddToCartController>(builder: (controller) {
+      body: GetBuilder<CartController>(builder: (controller) {
         if (controller.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -111,7 +108,7 @@ class _CartScreenState extends State<CartScreen> {
                                             1;
                                         if (currentQuantity > 1) {
                                           controller.updateQuantity(
-                                              item['foodId'],
+                                              item['cartId'],
                                               currentQuantity - 1);
                                         }
                                       },
@@ -132,7 +129,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 item['quantity'].toString()) ??
                                             1;
                                         controller.updateQuantity(
-                                            item['foodId'],
+                                            item['cartId'],
                                             currentQuantity + 1);
                                       },
                                       icon: Icon(
@@ -148,7 +145,9 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              controller.removeFromCart(item['foodId']);
+                              controller.removeFromCart(
+                                item['cartId'],
+                              );
                             },
                             icon:
                                 Icon(Icons.cancel, color: Colors.grey.shade700),
@@ -219,13 +218,21 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   20.sizeHeight,
                   CommonButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      context.loaderOverlay.show();
                       int totalAmount = controller.getTotalPrice() + 50;
+                      String userMobileNumber =
+                          await controller.getCurrentUserPhoneNumber();
+
+                      print("User Mobile Number: $userMobileNumber");
+
                       NavigationServices.to(
                         () => AddressScreen(
+                          mobileNumber: userMobileNumber,
                           payment: totalAmount.toString(),
                         ),
                       );
+                      context.loaderOverlay.hide();
                     },
                     text: "Confirm",
                   )

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_hub_user/core/component/bottom_navigation_bar_screen.dart';
+import 'package:food_hub_user/core/utils/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -30,15 +31,17 @@ class OnlinePaymentController extends GetxController {
     userAddress = "$flatNumber,  $homeAddress , $landmark , $city , $pinCode.";
   }
 
-  Future<void> openCheckout({required String payment, String? mobileNumber}) async {
+  Future<void> openCheckout(
+      {required String payment, required String mobileNumber}) async {
     paymentAmount.value = double.parse(payment);
+
     var options = {
       'key': 'rzp_test_oR6NQlpwHLnUE0',
       'amount': int.parse(payment) * 100,
       'name': 'Food Hub',
       'description': 'Order Payment',
       'prefill': {
-        'contact': mobileNumber,
+        'contact': mobileNumber, // ✅ Ensure the contact is not null
         'email': 'customer@example.com',
       },
       'theme': {
@@ -55,14 +58,19 @@ class OnlinePaymentController extends GetxController {
 
   Future<void> placeCashOrder(String payment) async {
     paymentAmount.value = double.parse(payment);
+
     String userId = FirebaseAuth.instance.currentUser?.uid ?? "";
+
     if (userId.isEmpty || userAddress.isEmpty) {
-      Get.snackbar("Error", "Please enter your address before placing an order.");
+      Get.snackbar(
+          "Error", "Please enter your address before placing an order.");
       return;
     }
 
-    QuerySnapshot cartSnapshot =
-        await FirebaseFirestore.instance.collection('user').doc(userId).collection('cart').get();
+    QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
+        .collection('cart')
+        .where('userId', isEqualTo: userId)
+        .get();
 
     if (cartSnapshot.docs.isEmpty) {
       Get.snackbar("Cart Empty", "Your cart is empty, cannot place an order.");
@@ -73,16 +81,19 @@ class OnlinePaymentController extends GetxController {
     List<Map<String, dynamic>> orderItems = [];
 
     for (var doc in cartSnapshot.docs) {
-      String foodId = doc.id;
+      String foodId = doc['foodId'];
       int quantity = (doc['quantity'] as num).toInt();
 
-      DocumentSnapshot foodDoc =
-          await FirebaseFirestore.instance.collection('FoodItems').doc(foodId).get();
+      DocumentSnapshot foodDoc = await FirebaseFirestore.instance
+          .collection('FoodItems')
+          .doc(foodId)
+          .get();
 
       if (!foodDoc.exists) continue;
 
       Map<String, dynamic>? foodData = foodDoc.data() as Map<String, dynamic>?;
-      double price = double.tryParse(foodData?['food_price'].toString() ?? '0') ?? 0.0;
+      double price =
+          double.tryParse(foodData?['food_price'].toString() ?? '0') ?? 0.0;
 
       orderItems.add({
         'foodId': foodId,
@@ -97,7 +108,7 @@ class OnlinePaymentController extends GetxController {
     }
 
     await FirebaseFirestore.instance.collection('orders').doc(orderId).set({
-      'orderId': orderId, // Store Order ID
+      'orderId': orderId,
       'userId': userId,
       'items': orderItems,
       'address': userAddress,
@@ -111,8 +122,10 @@ class OnlinePaymentController extends GetxController {
     for (var doc in cartSnapshot.docs) {
       await doc.reference.delete();
     }
+    AppSnackbar.showSuccess(
+        title: "success",
+        message: "Your cash order has been placed successfully!");
 
-    Get.snackbar("Order Placed", "Your cash order has been placed successfully!");
     Get.offAll(() => const BottomNavigationBarScreen());
   }
 
@@ -121,11 +134,14 @@ class OnlinePaymentController extends GetxController {
       String userId = FirebaseAuth.instance.currentUser?.uid ?? "";
       if (userId.isEmpty || userAddress.isEmpty) return;
 
-      QuerySnapshot cartSnapshot =
-          await FirebaseFirestore.instance.collection('user').doc(userId).collection('cart').get();
+      QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
+          .collection('cart')
+          .where('userId', isEqualTo: userId) // ✅ Filter by userId
+          .get();
 
       if (cartSnapshot.docs.isEmpty) {
-        Get.snackbar("Cart Empty", "Your cart is empty, cannot place an order.");
+        Get.snackbar(
+            "Cart Empty", "Your cart is empty, cannot place an order.");
         return;
       }
 
@@ -133,16 +149,27 @@ class OnlinePaymentController extends GetxController {
       List<Map<String, dynamic>> orderItems = [];
 
       for (var doc in cartSnapshot.docs) {
-        String foodId = doc.id;
+        String foodId = doc['foodId']; // ✅ Correct foodId usage
         int quantity = (doc['quantity'] as num).toInt();
 
-        DocumentSnapshot foodDoc =
-            await FirebaseFirestore.instance.collection('FoodItems').doc(foodId).get();
+        DocumentSnapshot foodDoc = await FirebaseFirestore.instance
+            .collection('FoodItems')
+            .doc(foodId)
+            .get();
 
         if (!foodDoc.exists) continue;
 
-        Map<String, dynamic>? foodData = foodDoc.data() as Map<String, dynamic>?;
-        double price = double.tryParse(foodData?['food_price'].toString() ?? '0') ?? 0.0;
+        Map<String, dynamic>? foodData =
+            foodDoc.data() as Map<String, dynamic>?;
+
+        double price;
+        if (foodData?['food_price'] is int) {
+          price = (foodData?['food_price'] as int)
+              .toDouble(); // ✅ Convert int to double
+        } else {
+          price =
+              double.tryParse(foodData?['food_price'].toString() ?? '0') ?? 0.0;
+        }
 
         orderItems.add({
           'foodId': foodId,
@@ -156,26 +183,28 @@ class OnlinePaymentController extends GetxController {
         return;
       }
 
-      await FirebaseFirestore.instance.collection('orders').doc(orderId).set(
-        {
-          'orderId': orderId,
-          'userId': userId,
-          'items': orderItems,
-          'address': userAddress,
-          "amount": paymentAmount.value,
-          'paymentType': "Online",
-          'paymentId': response.paymentId,
-          'status': "Pending",
-          'timestamp': DateTime.now()
-        },
-      );
+      await FirebaseFirestore.instance.collection('orders').doc(orderId).set({
+        'orderId': orderId,
+        'userId': userId,
+        'items': orderItems,
+        'address': userAddress,
+        "amount": paymentAmount.value,
+        'paymentType': "Online",
+        'paymentId': response.paymentId,
+        'status': "Pending",
+        'timestamp': DateTime.now()
+      });
 
+      // ✅ Clear user cart after successful order
       for (var doc in cartSnapshot.docs) {
         await doc.reference.delete();
       }
 
-      Get.snackbar(
-          "Payment Success", "Your payment was successful, and the order has been placed!");
+      AppSnackbar.showSuccess(
+          title: "Payment Success",
+          message:
+              "Your payment was successful, and the order has been placed!");
+
       Get.offAll(() => const BottomNavigationBarScreen());
     } catch (e) {
       debugPrint("Error handling payment success: $e");
